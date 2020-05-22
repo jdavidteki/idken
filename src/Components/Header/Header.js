@@ -23,6 +23,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
+import { setLoggedInUser } from "../../Redux/Actions";
 
 const mapStateToProps = state => {
   return {
@@ -46,6 +47,14 @@ class ConnectedHeader extends Component {
     anchorEl: null,
     categoryFilterValue: categories[0].name
   };
+
+  componentDidMount(){
+    let user = JSON.parse(localStorage.getItem('loggedInUser'));
+
+    if (user) {
+      this.props.dispatch(setLoggedInUser({ name: user.name }));
+    }
+  }
 
   render() {
     let { anchorEl } = this.state;
@@ -166,10 +175,18 @@ class ConnectedHeader extends Component {
                     this.props.history.push("/");
                   });
                   this.setState({ anchorEl: null });
+                  localStorage.removeItem('loggedInUser');
                 }}
               >
                 Logout
               </MenuItem>
+              { this.props.loggedInUser ? (
+                  <MenuItem>
+                    {this.props.loggedInUser.name}
+                  </MenuItem>
+                ):(
+                  <TextField></TextField>
+                )}
             </Menu>
           </div>
         </Toolbar>

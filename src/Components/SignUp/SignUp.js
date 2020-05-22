@@ -8,12 +8,15 @@ import Avatar from '@material-ui/core/Avatar';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Firebase from "../../Firebase/Firebase.js";
 
-class ConnectedLogin extends Component {
+class ConnectedSignUp extends Component {
   state = {
+    firstName: "",
+    lastName: "",
     email: "",
     pass: "",
+    repass: "",
     redirectToReferrer: false,
-    loginErrorMsg: ""
+    SignUpErrorMsg: ""
   };
 
   componentDidMount() {
@@ -58,9 +61,23 @@ class ConnectedLogin extends Component {
             }}
           >
             {" "}
-            Log in
+            Sign Up
             {" "}
           </div>
+          <TextField
+            value={this.state.firstName}
+            placeholder="First Name"
+            onChange={e => {
+              this.setState({ firstName: e.target.value });
+            }}
+          />
+          <TextField
+            value={this.state.lastName}
+            placeholder="Last Name"
+            onChange={e => {
+              this.setState({ lastName: e.target.value });
+            }}
+          />
           <TextField
             value={this.state.email}
             placeholder="User Email"
@@ -76,51 +93,51 @@ class ConnectedLogin extends Component {
               this.setState({ pass: e.target.value });
             }}
           />
-          <Button
-            style={{ marginTop: 20, width: 200, marginBottom: 10 }}
-            variant="outlined"
-            color="primary"
-            onClick={() => {
-
-              Firebase.userLogin(this.state.email, this.state.pass)
-              .then(user => {
-                localStorage.setItem('loggedInUser', JSON.stringify({
-                  "name": user.user.displayName,
-                  "uid": user.user.uid,
-                }));
-                this.props.dispatch(setLoggedInUser({ name:  user.user.displayName }));
-                this.setState(() => ({
-                  redirectToReferrer: true
-                }));
-              }).catch(error => {
-                this.setState({ wrongCred: true, loginErrorMsg: error});
-                return;
-              });
+          <TextField
+            value={this.state.repass}
+            type="password"
+            placeholder="re-type password"
+            onChange={e => {
+              this.setState({ repass: e.target.value });
             }}
-          >
-            Log in
-          </Button>
-          {this.state.wrongCred && (
-            <div style={{ color: "red" }}>{this.state.loginErrorMsg}</div>
-          )}
-          {" "}
-          Or
-          {" "}
+          />
           <Button
             style={{ marginTop: 20, width: 200 }}
             variant="outlined"
             color="primary"
             onClick={() => {
-              this.props.history.push("/signup");
+              if (this.state.repass != this.state.pass) {
+                this.setState({ wrongCred: true, SignUpErrorMsg: "Passwords dont match, try again"});
+                return;
+              }
+
+              Firebase.createFirebaseAccount(this.state.firstName + ' ' + this.state.lastName, this.state.email, this.state.pass)
+              .then(user => {
+                localStorage.setItem('loggedInUser', JSON.stringify({
+                  "name": this.state.firstName + ' ' + this.state.lastName,
+                  "uid": user[1].user.uid,
+                }));
+                this.props.dispatch(setLoggedInUser({ name: this.state.firstName + ' ' + this.state.lastName }));
+                this.setState(() => ({
+                  redirectToReferrer: true
+                }));
+              }).catch(error => {
+                console.log(error)
+                this.setState({ wrongCred: true, SignUpErrorMsg: error.toString()});
+                return;
+              });
             }}
           >
-            Sign Up
+           Sign Up
           </Button>
+          {this.state.wrongCred && (
+            <div style={{ color: "red" }}>{this.state.SignUpErrorMsg}</div>
+          )}
         </div>
       </div>
     );
   }
 }
-const Login = withRouter(connect()(ConnectedLogin));
+const SignUp = withRouter(connect()(ConnectedSignUp));
 
-export default Login;
+export default SignUp;

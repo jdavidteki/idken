@@ -8,6 +8,7 @@ import CartDialog from "./Components/CartDialog/CartDialog";
 import Details from "./Components/Details/Details";
 import Order from "./Components/Order/Order";
 import Login from "./Components/Login/Login";
+import SignUp from "./Components/SignUp/SignUp";
 import ProtectedRoute from "./Components/ProtectedRoute/ProtectedRoute";
 import Footer from "./Components/Footer/Footer";
 import IctAcademy from "./Components/IctAcademy/IctAcademy";
@@ -25,6 +26,7 @@ class App extends Component {
               <Route path="/" exact component={ProductList} />
               <Route path="/details/:id" component={Details} />
               <Route path="/login" component={Login} />
+              <Route path="/signup" component={SignUp} />
               <Route path="/ictacademy" component={IctAcademy} />
               <ProtectedRoute path="/order" component={Order} />
               <Route
