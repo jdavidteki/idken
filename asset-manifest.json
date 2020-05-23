@@ -1,0 +1,22 @@
+{
+  "files": {
+    "app.js": "/idken/static/js/app.537c12cf.chunk.js",
+    "app.js.map": "/idken/static/js/app.537c12cf.chunk.js.map",
+    "runtime~app.js": "/idken/static/js/runtime~app.b4a2df9d.js",
+    "runtime~app.js.map": "/idken/static/js/runtime~app.b4a2df9d.js.map",
+    "static/js/2.3b34e7a0.chunk.js": "/idken/static/js/2.3b34e7a0.chunk.js",
+    "static/js/2.3b34e7a0.chunk.js.map": "/idken/static/js/2.3b34e7a0.chunk.js.map",
+    "favicon-16.png": "/idken/favicon-16.png",
+    "favicon-32.png": "/idken/favicon-32.png",
+    "favicon.ico": "/idken/favicon.ico",
+    "index.html": "/idken/index.html",
+    "manifest.json": "/idken/manifest.json",
+    "serve.json": "/idken/serve.json",
+    "static/media/logo.png": "/idken/static/media/logo.e0e01978.png"
+  },
+  "entrypoints": [
+    "static/js/runtime~app.b4a2df9d.js",
+    "static/js/2.3b34e7a0.chunk.js",
+    "static/js/app.537c12cf.chunk.js"
+  ]
+}
