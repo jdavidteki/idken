@@ -93,7 +93,7 @@ class ConnectedLogin extends Component {
                   redirectToReferrer: true
                 }));
               }).catch(error => {
-                this.setState({ wrongCred: true, loginErrorMsg: error});
+                this.setState({ wrongCred: true, loginErrorMsg: error.toString()});
                 return;
               });
             }}

@@ -1,5 +1,7 @@
+import apiKeys from "../apiKeys.js";
+
 var config = {
-    apiKey: "AIzaSyCW_GBh7oKlzwAIVxeKs8tDPx2V404z7HU",
+    apiKey: apiKeys.FIREBASE,
     authDomain: "idken-b4bf4.firebaseapp.com",
     databaseURL: "https://idken-b4bf4.firebaseio.com",
     projectId: "idken-b4bf4",

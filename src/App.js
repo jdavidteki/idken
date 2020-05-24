@@ -8,6 +8,7 @@ import CartDialog from "./Components/CartDialog/CartDialog";
 import Details from "./Components/Details/Details";
 import Order from "./Components/Order/Order";
 import Login from "./Components/Login/Login";
+import PaymentForm from "./Components/PaymentForm/PaymentForm";
 import SignUp from "./Components/SignUp/SignUp";
 import ProtectedRoute from "./Components/ProtectedRoute/ProtectedRoute";
 import Footer from "./Components/Footer/Footer";
@@ -28,6 +29,7 @@ class App extends Component {
               <Route path="/login" component={Login} />
               <Route path="/signup" component={SignUp} />
               <Route path="/ictacademy" component={IctAcademy} />
+              <Route path="/payment" component={PaymentForm} />
               <ProtectedRoute path="/order" component={Order} />
               <Route
                 component={() => (

@@ -32,28 +32,30 @@ class Firebase {
   };
 
   createFirebaseAccount = (name, email, password) => {
-    return new Promise(resolve => {
-      firebase.auth().createUserWithEmailAndPassword(email, password).catch(error => {
+    return new Promise((resolve, reject) => {
+      firebase.auth().createUserWithEmailAndPassword(email, password)
+      .catch(error => {
+        let err =''
         switch (error.code) {
           case 'auth/email-already-in-use':
-            console.warn('This email address is already taken');
+          err = 'This email address is already taken';
             break;
           case 'auth/invalid-email':
-            console.warn('Invalid e-mail address format');
+          err = 'Invalid e-mail address format';
             break;
           case 'auth/weak-password':
-            console.warn('Password is too weak');
+          err = 'Password is too weak';
             break;
           default:
-            console.warn('Check your internet connection');
+          err = 'Check your internet connection';
         }
-        resolve([false, null]);
+        reject(err);
       }).then(info => {
         if (info) {
           firebase.auth().currentUser.updateProfile({
             displayName: name
           });
-          resolve([true, info]);
+          resolve(info);
         }
       });
     });

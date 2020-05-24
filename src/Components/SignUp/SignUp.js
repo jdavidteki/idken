@@ -113,9 +113,10 @@ class ConnectedSignUp extends Component {
 
               Firebase.createFirebaseAccount(this.state.firstName + ' ' + this.state.lastName, this.state.email, this.state.pass)
               .then(user => {
+                console.log("user is ", user.user.uid)
                 localStorage.setItem('loggedInUser', JSON.stringify({
                   "name": this.state.firstName + ' ' + this.state.lastName,
-                  "uid": user[1].user.uid,
+                  "uid": user.user.uid,
                 }));
                 this.props.dispatch(setLoggedInUser({ name: this.state.firstName + ' ' + this.state.lastName }));
                 this.setState(() => ({
