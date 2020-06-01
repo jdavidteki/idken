@@ -13,6 +13,7 @@ import SignUp from "./Components/SignUp/SignUp";
 import ProtectedRoute from "./Components/ProtectedRoute/ProtectedRoute";
 import Footer from "./Components/Footer/Footer";
 import IctAcademy from "./Components/IctAcademy/IctAcademy";
+import NegotiatePrice from "./Components/NegotiatePrice/NegotiatePrice";
 
 class App extends Component {
   render() {
@@ -30,6 +31,7 @@ class App extends Component {
               <Route path="/signup" component={SignUp} />
               <Route path="/ictacademy" component={IctAcademy} />
               <Route path="/payment" component={PaymentForm} />
+              <Route path="/negotiateprice/:id" component={NegotiatePrice} />
               <ProtectedRoute path="/order" component={Order} />
               <Route
                 component={() => (

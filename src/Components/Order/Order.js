@@ -70,17 +70,6 @@ class ConnectedOrder extends Component {
           Purchase
         </Button>
         <Button
-          color="primary"
-          variant="outlined"
-          disabled={totalPrice === 0}
-          onClick={() => {
-            console.log("negotiate");
-          }}
-          style={{ margin: 5, marginTop: 30 }}
-        >
-          Negotiate
-        </Button>
-        <Button
           color="secondary"
           variant="outlined"
           disabled={totalPrice === 0}

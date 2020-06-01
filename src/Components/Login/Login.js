@@ -88,7 +88,7 @@ class ConnectedLogin extends Component {
                   "name": user.user.displayName,
                   "uid": user.user.uid,
                 }));
-                this.props.dispatch(setLoggedInUser({ name:  user.user.displayName }));
+                this.props.dispatch(setLoggedInUser({ name:  user.user.displayName, uid: user.user.uid }));
                 this.setState(() => ({
                   redirectToReferrer: true
                 }));

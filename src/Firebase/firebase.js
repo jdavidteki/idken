@@ -8,6 +8,10 @@ class Firebase {
         firebase.initializeApp(config);
     }
   };
+
+  db = () => {
+    return firebase.database()
+  }
     
   userLogin = (email, password) => {
     return new Promise((resolve, reject) => {
@@ -82,6 +86,23 @@ class Firebase {
         });
     })
   };
+  
+  postChats = (seller, buyer, message, productId) =>{
+    return new Promise((resolve, reject) => {
+      this.db().
+      ref('/chats/' + seller + 'vs' + buyer + '/' + productId + '/').
+      push({
+          content: message,
+          timestamp: Date.now(),
+          uid: buyer,
+       }).
+      then(() => {
+        resolve(true)
+      }).catch(error =>{
+        reject(error)
+      })
+    })
+  }
 }
 
 export default new Firebase();

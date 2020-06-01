@@ -7,9 +7,6 @@ import Api from "../../Api";
 import Item from "../Item/Item";
 import { connect } from "react-redux";
 import TextField from "@material-ui/core/TextField";
-import Paper from '@material-ui/core/Paper';
-
-
 
 class ConnectedDetails extends Component {
   constructor(props) {
@@ -106,7 +103,7 @@ class ConnectedDetails extends Component {
               fontSize: 16,
 
             }}>
-              Price: {this.state.item.price} $
+              Price: ${this.state.item.price}
             </div>
             {this.state.item.popular && (
               <div style={{ fontSize: 14, marginTop: 5, color: "#228B22" }}>

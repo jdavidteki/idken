@@ -4,6 +4,7 @@ const sampleProducts = [
     id: 1,
     name: "Nike Air Presto",
     category: "Phones",
+    sellerId: "u3tW4X4AtVfvsgHElNkjDVwuebI3",
     price: 55,
     description:
       "The Nike Air Presto Women's Shoe delivers the same unrivaled fit and comfort that marked the 2000 debut of the original.",
@@ -17,6 +18,7 @@ const sampleProducts = [
     id: 2,
     name: "Casio F-91W-1XY",
     category: "Phones",
+    sellerId: "u3tW4X4AtVfvsgHElNkjDVwuebI3",
     price: 101,
     description:
       "Shaped in an iconic casio design, this watch features a digital display, stopwatch and an LED backlight. The watch is housed in a durable resin case. Suitable for everyday styling.",
@@ -32,6 +34,7 @@ const sampleProducts = [
     name: "Seiko Silvertone Black Dial Solar Calendar Watch",
     category: "Phones",
     price: 200,
+    sellerId: "u3tW4X4AtVfvsgHElNkjDVwuebI3",
 
     popular: false,
     imageUrls: [
@@ -44,6 +47,7 @@ const sampleProducts = [
     name: "Harry Potter",
     category: "Tablets",
     price: 102,
+    sellerId: "u3tW4X4AtVfvsgHElNkjDVwuebI3",
     description:
       "Harry Potter is an ordinary boy who lives in a cupboard under the stairs at his Aunt Petunia" +
       "and Uncle Vernon's house, which he thinks is normal for someone like him who's parents have been killed in" +
@@ -61,6 +65,7 @@ const sampleProducts = [
     name: "DELL SE2717HR",
     category: "Tablets",
     price: 102,
+    sellerId: "u3tW4X4AtVfvsgHElNkjDVwuebI3",
     description:
       "Amazing angles: Share consistent high-color fidelity with In-Plane Switching (IPS) technology across a 27-inch diagonal screen. A stunning vantage point for everyone, from almost anywhere" +
       "Distinctively modern and accessible: The contemporary thin profile is enhanced by the modern white and silver colors.The open wedge stand design provides convenient access to VGA and dual HDMI ports",
@@ -76,6 +81,7 @@ const sampleProducts = [
     name: "Swatch Skin",
     category: "Tablets",
     price: 200,
+    sellerId: "u3tW4X4AtVfvsgHElNkjDVwuebI3",
     description: "",
     popular: false,
     imageUrls: [
@@ -88,6 +94,7 @@ const sampleProducts = [
     category: "Tablets",
     price: 55,
     description: "",
+    sellerId: "u3tW4X4AtVfvsgHElNkjDVwuebI3",
     popular: false,
     imageUrls: [
       "https://www.adidas.co.uk/dis/dw/image/v2/aagl_prd/on/demandware.static/-/Sites-adidas-products/default/zoom/BB5480_00_plp_standard.jpg?sw=276&sh=276&sm=fit&hei=276&wid=276&strip=false",
@@ -100,6 +107,7 @@ const sampleProducts = [
     category: "Laptops",
     price: 55,
     description: "",
+    sellerId: "u3tW4X4AtVfvsgHElNkjDVwuebI3",
     popular: false,
     imageUrls: [
       "https://images-na.ssl-images-amazon.com/images/I/71qNNgYCHYL._SL1500_.jpg"
@@ -109,6 +117,7 @@ const sampleProducts = [
     id: 10,
     name: "Swatch Blue Suit Mens Watch YGS747 Wrist Watch",
     category: "Laptops",
+    sellerId: "u3tW4X4AtVfvsgHElNkjDVwuebI3",
     price: 120,
     description: "",
 
@@ -121,6 +130,7 @@ const sampleProducts = [
     id: 11,
     name: "DELL 23 S2340L 1920X1080 FULL HD",
     category: "Laptops",
+    sellerId: "u3tW4X4AtVfvsgHElNkjDVwuebI3",
     price: 220,
     description:
       "This Certified Refurbished product is tested and certified to look and work like new. The refurbishing process includes functionality testing, basic cleaning, inspection, and repackaging. The product ships with all relevant accessories, a minimum 90-day warranty, and may arrive in a generic box. Only select sellers who maintain a high performance bar may offer Certified Refurbished products on Amazon.com",
@@ -133,6 +143,7 @@ const sampleProducts = [
     id: 12,
     name: "Invicta Men's Pro Diver Collection Watch -Black",
     category: "Accessories",
+    sellerId: "u3tW4X4AtVfvsgHElNkjDVwuebI3",
     price: 130,
     description:
       "Water resistant to 200 m (660 ft): In general, suitable for professional marine activity and serious surface water sports, but not scuba diving",

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import IconButton from "@material-ui/core/IconButton";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
+import ForumIcon from '@material-ui/icons/Forum';
 import { connect } from "react-redux";
 import { addItemInCart } from "../../Redux/Actions";
 import { withRouter } from "react-router-dom";
@@ -50,7 +51,7 @@ class ConnectedItem extends Component {
         >
           <Button
             size="small"
-            style={{ marginRight: 60 }}
+            style={{ marginRight: 50 }}
             onClick={() => {
               this.props.history.push("/details/" + this.props.item.id);
             }}
@@ -71,6 +72,19 @@ class ConnectedItem extends Component {
               aria-label="Add to shopping cart"
             >
               <AddShoppingCartIcon size="small" />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Negotiate Price">
+            <IconButton
+              size="small"
+              onClick={e => {
+                e.stopPropagation();
+                this.props.history.push("/negotiateprice/" + this.props.item.id);
+              }}
+              color="primary"
+              aria-label="Negotiate Price"
+            >
+              <ForumIcon size="small" />
             </IconButton>
           </Tooltip>
         </CardActions>
