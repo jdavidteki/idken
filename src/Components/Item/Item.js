@@ -79,7 +79,15 @@ class ConnectedItem extends Component {
               size="small"
               onClick={e => {
                 e.stopPropagation();
-                this.props.history.push("/negotiateprice/" + this.props.item.id);
+
+               if (this.props.loggedInUser.uid == this.props.item.sellerId){
+                  //call seller view negotiation view
+                  this.props.history.push("/allnegotiations/" + this.props.item.id);
+                } else {
+                  console.log("on a private jet", this.props.loggedInUser, this.props.item.sellerId)
+                  this.props.history.push("/negotiateprice/" + this.props.item.id);
+                }
+
               }}
               color="primary"
               aria-label="Negotiate Price"
@@ -93,4 +101,10 @@ class ConnectedItem extends Component {
   }
 }
 
-export default withRouter(connect()(ConnectedItem));
+const mapStateToProps = state => {
+  return {
+    loggedInUser: state.loggedInUser,
+  };
+};
+
+export default withRouter(connect(mapStateToProps)(ConnectedItem));

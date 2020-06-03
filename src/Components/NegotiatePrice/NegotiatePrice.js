@@ -26,6 +26,7 @@ class ConnectedNegotiatePrice extends Component {
 
   async componentDidMount() {
     Firebase.initializeApp()
+
     this.setState({ readError: null, loadingChats: true });
     const chatArea = this.myRef.current;
 
@@ -35,9 +36,8 @@ class ConnectedNegotiatePrice extends Component {
         user: this.props.loggedInUser
     });
 
-    //if sellerId == userId that means user is seller and should see all the negotiations when he clicks the negotiation icon
     try {
-      Firebase.db().ref("chats/" + this.state.item.sellerId + "vs" + this.state.user.uid + "/" + this.props.match.params.id).on("value", snapshot => {
+      Firebase.db().ref("chats/" + this.state.item.sellerId + "/" + this.props.match.params.id + "/" + this.state.user.uid ).on("value", snapshot => {
         let chats = [];
         snapshot.forEach((snap) => {
         chats.push(snap.val());
@@ -68,14 +68,18 @@ class ConnectedNegotiatePrice extends Component {
     event.preventDefault();
     this.setState({ writeError: null });
     const chatArea = this.myRef.current;
-    Firebase.postChats(this.state.item.sellerId, this.state.user.uid, this.state.content, this.props.match.params.id).
-    then(val => {
-        this.setState({ content: '' });
-        chatArea.scrollBy(0, chatArea.scrollHeight);
-    }).
-    catch(error => {
-        this.setState({ writeError: error.message });
-    })
+    
+    if (this.state.content.length > 0){
+      Firebase.postChats(this.state.item.sellerId, this.state.user.uid, this.state.content, this.props.match.params.id, this.state.user.uid).
+      then(val => {
+          this.setState({ content: '' });
+          chatArea.scrollBy(0, chatArea.scrollHeight);
+      }).
+      catch(error => {
+          this.setState({ writeError: error.message });
+      })
+    }
+    
   }
 
   formatTime(timestamp) {

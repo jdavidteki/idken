@@ -87,18 +87,32 @@ class Firebase {
     })
   };
   
-  postChats = (seller, buyer, message, productId) =>{
+  postChats = (seller, buyer, message, productId, senderID) =>{
     return new Promise((resolve, reject) => {
       this.db().
-      ref('/chats/' + seller + 'vs' + buyer + '/' + productId + '/').
+      ref('/chats/' + seller + '/' + productId + '/' + buyer + '/').
       push({
           content: message,
           timestamp: Date.now(),
-          uid: buyer,
+          uid: senderID,
        }).
       then(() => {
         resolve(true)
       }).catch(error =>{
+        reject(error)
+      })
+    })
+  }
+
+  getAllNegotiations = (sellerID, productId) =>{
+    return new Promise((resolve, reject) => {
+      this.db().
+      ref('/chats/' + sellerID + '/' + productId + '/').
+      once('value').
+      then(snapshot => {
+        resolve(snapshot.val())
+      }).
+      catch(error => {
         reject(error)
       })
     })
