@@ -19,6 +19,7 @@ class ConnectedNegotiatePrice extends Component {
       loadingChats: false,
       item: null,
     };
+    let buyerToUse = ""
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.myRef = React.createRef();
@@ -36,8 +37,14 @@ class ConnectedNegotiatePrice extends Component {
         user: this.props.loggedInUser
     });
 
+    this.buyerToUse = this.state.user.uid
+
+    if (this.state.user.uid == this.state.item.sellerId){
+      this.buyerToUse = this.props.location.state.clickedBuyerId
+    }
+
     try {
-      Firebase.db().ref("chats/" + this.state.item.sellerId + "/" + this.props.match.params.id + "/" + this.state.user.uid ).on("value", snapshot => {
+      Firebase.db().ref("chats/" + this.state.item.sellerId + "/" + this.props.match.params.id + "/" + this.buyerToUse ).on("value", snapshot => {
         let chats = [];
         snapshot.forEach((snap) => {
         chats.push(snap.val());
@@ -70,7 +77,7 @@ class ConnectedNegotiatePrice extends Component {
     const chatArea = this.myRef.current;
     
     if (this.state.content.length > 0){
-      Firebase.postChats(this.state.item.sellerId, this.state.user.uid, this.state.content, this.props.match.params.id, this.state.user.uid).
+      Firebase.postChats(this.state.item.sellerId, this.buyerToUse, this.state.content, this.props.match.params.id, this.state.user.uid).
       then(val => {
           this.setState({ content: '' });
           chatArea.scrollBy(0, chatArea.scrollHeight);

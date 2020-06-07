@@ -117,6 +117,21 @@ class Firebase {
       })
     })
   }
+
+  getUserNameFromID = (uid) => {
+    return new Promise((resolve, reject) => {
+      this.db().
+      ref('/users/' + uid).
+      once('value').
+      then(snapshot => {
+        resolve(snapshot.val())
+      }).
+      catch(error => {
+        reject(error)
+      })
+    })
+  }
+
 }
 
 export default new Firebase();
