@@ -5,20 +5,28 @@ import { withRouter } from "react-router-dom";
 import Firebase from "../../Firebase/Firebase.js";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import {
+    SafeAreaView, 
     View, 
+    StyleSheet, 
     Text, 
-    FlatList,
-    TouchableHighlight,
+    FlatList, 
+    TouchableHighlight, 
   } from 'react-native';
 
 class ConnectedAllNegotiations extends Component {
-    state = {
-        allChatsOnProduct: []
+    constructor(props) {
+        super(props);
+        this.state = {
+            allChatsOnProduct: [],
+            loadedNego: false,
+        };
     }
 
     componentDidMount(){
-        Firebase.initializeApp()
-        
+        Firebase.initializeApp()    
+    }
+
+    loadAllNegotiations(){
         Firebase.getAllNegotiations(this.props.loggedInUser.uid, this.props.match.params.id).
         then(result => {
             let buyersId = Object.keys(result)
@@ -43,7 +51,7 @@ class ConnectedAllNegotiations extends Component {
                         name: val[i]
                     })
                 }
-                this.setState({allChatsOnProduct: sammy})
+                this.setState({allChatsOnProduct: sammy, loadedNego: true})
             })
             
         }).catch(error => {
@@ -61,7 +69,7 @@ class ConnectedAllNegotiations extends Component {
     renderItem({item, onPress}) {
         return (
             <TouchableHighlight onPress={onPress}>
-                <View>
+                <View style={styles.item}>
                     <Text>{item["name"]}</Text>
                 </View>
             </TouchableHighlight>
@@ -69,21 +77,27 @@ class ConnectedAllNegotiations extends Component {
     }
   
     render() {
+        if (this.props.loggedInUser && !this.state.loadedNego){
+            console.log("what this to load just once")
+            this.loadAllNegotiations()
+        }
 
         if (this.state.allChatsOnProduct.length > 0){
             return (
                 <div className="negotiations-area-container">
-                    Seller Page
-                    <FlatList
-                        data={this.state.allChatsOnProduct}
-                        renderItem={({ item }) => 
-                            <this.renderItem 
-                                onPress={() => this.onPress(item)}
-                                item={item} 
-                            />
-                        }
-                        keyExtractor={item => item["name"]}
-                    />
+                    <Text style={styles.title}>All Negotiating Buyers</Text>
+                    <SafeAreaView style={styles.container}>
+                        <FlatList
+                            data={this.state.allChatsOnProduct}
+                            renderItem={({ item }) => 
+                                <this.renderItem 
+                                    onPress={() => this.onPress(item)}
+                                    item={item} 
+                                />
+                            }
+                            keyExtractor={item => item["name"]}
+                        />
+                    </SafeAreaView>
                 </div>
             );
         }
@@ -93,6 +107,27 @@ class ConnectedAllNegotiations extends Component {
         )
     }
 }
+
+const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      paddingTop: 15,
+      backgroundColor: '#fff',
+    },
+    item: {
+      backgroundColor: '#d5f3f5',
+      padding: 20,
+      marginVertical: 8,
+      marginHorizontal: 16,
+      width: '40%',
+    },
+    title: {
+      fontSize: 32,
+      marginVertical: 8,
+      marginHorizontal: 16,
+    },
+});
+  
 
 const mapStateToProps = state => {
     return {

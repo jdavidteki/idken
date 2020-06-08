@@ -84,10 +84,8 @@ class ConnectedItem extends Component {
                   //call seller view negotiation view
                   this.props.history.push("/allnegotiations/" + this.props.item.id);
                 } else {
-                  console.log("on a private jet", this.props.loggedInUser, this.props.item.sellerId)
                   this.props.history.push("/negotiateprice/" + this.props.item.id);
                 }
-
               }}
               color="primary"
               aria-label="Negotiate Price"
