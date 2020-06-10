@@ -18,6 +18,7 @@ class ConnectedNegotiatePrice extends Component {
       writeError: null,
       loadingChats: false,
       item: null,
+      sellerName: '',
     };
     let buyerToUse = ""
     this.handleChange = this.handleChange.bind(this);
@@ -35,10 +36,11 @@ class ConnectedNegotiatePrice extends Component {
     this.setState({
         item: item,
         user: this.props.loggedInUser
-    });
+    })
 
+    this.getSellerName()
     this.buyerToUse = this.state.user.uid
-
+   
     if (this.state.user.uid == this.state.item.sellerId){
       this.buyerToUse = this.props.location.state.clickedBuyerId
     }
@@ -89,6 +91,17 @@ class ConnectedNegotiatePrice extends Component {
     
   }
 
+  getSellerName = () => {
+    if (this.state.item.sellerId != this.state.user.uid){
+      Firebase.getUserNameFromID(this.state.item.sellerId).
+      then((val) => {
+        this.setState({sellerName: val})
+      })
+    }else{
+      this.setState({sellerName: this.state.user.name})
+    }
+  }
+
   formatTime(timestamp) {
     const d = new Date(timestamp);
     const time = `${d.getDate()}/${(d.getMonth()+1)}/${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}`;
@@ -112,6 +125,7 @@ class ConnectedNegotiatePrice extends Component {
             }} 
         >
             <span>Negotiations about {this.state.item.name}</span>
+            <p>{this.props.loggedInUser.name} ::: {this.props.location.state != null ? this.props.location.state.clickedBuyerName : this.state.sellerName} </p>
         </div>
         <div className="chat-area" ref={this.myRef}>
           {/* loading indicator */}

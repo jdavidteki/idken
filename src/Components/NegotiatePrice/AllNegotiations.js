@@ -62,7 +62,7 @@ class ConnectedAllNegotiations extends Component {
     onPress = (item) =>{
         this.props.history.push({
             pathname: "/negotiateprice/" + this.props.match.params.id,
-            state: { clickedBuyerId: item["id"] }
+            state: { clickedBuyerId: item["id"], clickedBuyerName: item["name"] }
         });
     }
 
@@ -78,7 +78,6 @@ class ConnectedAllNegotiations extends Component {
   
     render() {
         if (this.props.loggedInUser && !this.state.loadedNego){
-            console.log("what this to load just once")
             this.loadAllNegotiations()
         }
 

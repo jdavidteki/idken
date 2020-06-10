@@ -171,8 +171,8 @@ class ConnectedHeader extends Component {
               <MenuItem
                 onClick={() => {
                   Auth.signout(() => {
-                    this.props.dispatch(logout());
                     this.props.history.push("/");
+                    this.props.dispatch(logout());
                   });
                   this.setState({ anchorEl: null });
                   localStorage.removeItem('loggedInUser');
