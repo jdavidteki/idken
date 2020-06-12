@@ -47,7 +47,7 @@ class ConnectedItem extends Component {
           </CardContent>
         </CardActionArea>
         <CardActions
-          style={{ display: "flex", alignItems: "center", height: 45 }}
+          style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: 45 }}
         >
           <Button
             size="small"
@@ -74,25 +74,29 @@ class ConnectedItem extends Component {
               <AddShoppingCartIcon size="small" />
             </IconButton>
           </Tooltip>
-          <Tooltip title="Negotiate Price">
-            <IconButton
-              size="small"
-              onClick={e => {
-                e.stopPropagation();
+          {this.props.loggedInUser ? (
+            <Tooltip title="Negotiate Price">
+              <IconButton
+                size="small"
+                onClick={e => {
+                  e.stopPropagation();
 
-               if (this.props.loggedInUser.uid == this.props.item.sellerId){
-                  //call seller view negotiation view
-                  this.props.history.push("/allnegotiations/" + this.props.item.id);
-                } else {
-                  this.props.history.push("/negotiateprice/" + this.props.item.id);
-                }
-              }}
-              color="primary"
-              aria-label="Negotiate Price"
-            >
-              <ForumIcon size="small" />
-            </IconButton>
-          </Tooltip>
+                if (this.props.loggedInUser.uid){
+                    //call seller view negotiation view
+                    this.props.history.push("/allnegotiations/" + this.props.item.id);
+                  } else {
+                    this.props.history.push("/negotiateprice/" + this.props.item.id);
+                  }
+                }}
+                color="primary"
+                aria-label="Negotiate Price"
+              >
+                <ForumIcon size="small" />
+              </IconButton>
+            </Tooltip>
+          ):(
+            <div  style={{ display: "none" }}></div>
+          )}
         </CardActions>
       </Card>
     );

@@ -132,6 +132,35 @@ class Firebase {
     })
   }
 
+  sendNewDeal = (sellerId, buyerId, productId, amount) =>{
+    return new Promise((resolve, reject) => {
+      this.db().
+      ref('/deals/' + sellerId + '/' + productId + '/' + buyerId + '/').
+      set({
+          deal: amount,
+          timestamp: Date.now(),
+       }).
+      then((val) => {
+        resolve(val)
+      }).catch(error =>{
+        reject(error)
+      })
+    })
+  }
+
+  getNewDeal = (sellerId, buyerId, productId) =>{
+    return new Promise((resolve, reject) => {
+      this.db().
+      ref('/deals/' + sellerId + '/' + productId + '/' + buyerId + '/').
+      once('value').
+      then((snapshot) => {
+        resolve(snapshot.val())
+      }).catch(error =>{
+        reject(error)
+      })
+    })
+  }
+
 }
 
 export default new Firebase();

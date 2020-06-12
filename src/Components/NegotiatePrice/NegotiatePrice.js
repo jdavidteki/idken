@@ -19,6 +19,7 @@ class ConnectedNegotiatePrice extends Component {
       loadingChats: false,
       item: null,
       sellerName: '',
+      dealAmount: '',
     };
     let buyerToUse = ""
     this.handleChange = this.handleChange.bind(this);
@@ -73,6 +74,12 @@ class ConnectedNegotiatePrice extends Component {
     });
   }
 
+  handleDealChange = (event) => {
+    this.setState({
+      dealValue: event.target.value
+    });
+  }
+
   async handleSubmit(event) {
     event.preventDefault();
     this.setState({ writeError: null });
@@ -89,6 +96,21 @@ class ConnectedNegotiatePrice extends Component {
       })
     }
     
+  }
+
+  handleDealClick = (event) => {
+    event.preventDefault()
+    if( !isNaN(this.state.dealValue)){
+      Firebase.sendNewDeal(this.state.item.sellerId, this.buyerToUse, this.props.match.params.id, this.state.dealValue).
+      then(val =>{
+        Firebase.getNewDeal(this.state.item.sellerId, this.buyerToUse, this.props.match.params.id).
+        then((val) =>{
+          this.setState({dealAmount: val.deal})
+        })
+      })
+    }else{
+      this.setState({dealError: 'Ivalid Deal Number'})
+    }
   }
 
   getSellerName = () => {
@@ -126,6 +148,11 @@ class ConnectedNegotiatePrice extends Component {
         >
             <span>Negotiations about {this.state.item.name}</span>
             <p>{this.props.loggedInUser.name} ::: {this.props.location.state != null ? this.props.location.state.clickedBuyerName : this.state.sellerName} </p>
+            {this.state.dealAmount != '' ? (
+              <p>Seller made a deal of {this.state.dealAmount} </p>
+            ):(
+              <div  style={{ display: "none" }}></div>
+            )}
         </div>
         <div className="chat-area" ref={this.myRef}>
           {/* loading indicator */}
@@ -141,18 +168,44 @@ class ConnectedNegotiatePrice extends Component {
             </p>
           })}
         </div>
-        <form onSubmit={this.handleSubmit} className="mx-3">
-          <textarea className="form-control" name="content" onChange={this.handleChange} value={this.state.content}></textarea>
-          {this.state.error ? <p className="text-danger">{this.state.error}</p> : null}
-          <Button 
-            variant="outlined"
-            color="primary" 
-            type="submit" 
-            className="btn btn-submit px-5 mt-4"
-          >
-              Send
-          </Button>
-        </form>
+        <div className="chat-area-sendmsg">
+          <form onSubmit={this.handleSubmit} className="mx-3">
+            <textarea 
+              className="form-control" 
+              name="content"
+              onChange={this.handleChange} 
+              value={this.state.content}>
+            </textarea>
+            {this.state.error ? <p className="text-danger">{this.state.error}</p> : null}
+            <Button 
+              variant="outlined"
+              color="primary" 
+              type="submit" 
+              className="btn btn-submit px-5 mt-4"
+            >
+                Send
+            </Button>
+          </form>
+          {this.state.user.uid == this.state.item.sellerId ? (
+            <form onSubmit={this.handleDealClick} className="chat-area-deal">
+              <textarea className="deal-control" 
+                name="content" 
+                onChange={this.handleDealChange} 
+                value={this.state.dealValue}>
+              </textarea>
+              <Button 
+                variant="outlined"
+                color="primary" 
+                type="submit" 
+                className=""
+              >
+                  Deal!
+              </Button>
+            </form>
+          ): (
+            <div  style={{ display: "none" }}></div>
+          )}
+        </div>
       </div>
     );
   }
