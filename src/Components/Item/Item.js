@@ -81,7 +81,7 @@ class ConnectedItem extends Component {
                 onClick={e => {
                   e.stopPropagation();
 
-                if (this.props.loggedInUser.uid){
+                if (this.props.loggedInUser.uid == this.props.item.sellerId){
                     //call seller view negotiation view
                     this.props.history.push("/allnegotiations/" + this.props.item.id);
                   } else {

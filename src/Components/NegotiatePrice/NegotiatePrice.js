@@ -46,6 +46,7 @@ class ConnectedNegotiatePrice extends Component {
       this.buyerToUse = this.props.location.state.clickedBuyerId
     }
 
+    //load chats on app iniitalization, and when a new chat is sent
     try {
       Firebase.db().ref("chats/" + this.state.item.sellerId + "/" + this.props.match.params.id + "/" + this.buyerToUse ).on("value", snapshot => {
         let chats = [];
@@ -64,6 +65,17 @@ class ConnectedNegotiatePrice extends Component {
     } catch (error) {
         console.log("error", error)
         this.setState({ readError: error.message, loadingChats: false });
+    }
+
+    //use .on to only check when a new deal has been made
+    try {
+      Firebase.db().ref("deals/" + this.state.item.sellerId + "/" + this.props.match.params.id + "/" + this.buyerToUse ).on("value", snapshot => {
+        console.log("snapshot.val()", snapshot.val())
+        this.setState({ dealAmount: snapshot.val().deal });
+      });
+    } catch (error) {
+        console.log("error", error)
+        this.setState({ readError: error.message, dealAmount: '' });
     }
 
   }
@@ -101,13 +113,7 @@ class ConnectedNegotiatePrice extends Component {
   handleDealClick = (event) => {
     event.preventDefault()
     if( !isNaN(this.state.dealValue)){
-      Firebase.sendNewDeal(this.state.item.sellerId, this.buyerToUse, this.props.match.params.id, this.state.dealValue).
-      then(val =>{
-        Firebase.getNewDeal(this.state.item.sellerId, this.buyerToUse, this.props.match.params.id).
-        then((val) =>{
-          this.setState({dealAmount: val.deal})
-        })
-      })
+      Firebase.sendNewDeal(this.state.item.sellerId, this.buyerToUse, this.props.match.params.id, this.state.dealValue)
     }else{
       this.setState({dealError: 'Ivalid Deal Number'})
     }
@@ -130,6 +136,14 @@ class ConnectedNegotiatePrice extends Component {
     return time;
   }
 
+  acceptDeal = () =>{
+    //
+  }
+
+  declineDeal = () =>{
+    //
+  }
+
   render() {
 
     if (!this.state.item) {
@@ -147,13 +161,51 @@ class ConnectedNegotiatePrice extends Component {
             }} 
         >
             <span>Negotiations about {this.state.item.name}</span>
-            <p>{this.props.loggedInUser.name} ::: {this.props.location.state != null ? this.props.location.state.clickedBuyerName : this.state.sellerName} </p>
+            <p>
+              {this.props.loggedInUser.name} 
+                ---****--- 
+              {this.props.location.state != null ? 
+              this.props.location.state.clickedBuyerName : 
+              this.state.sellerName} 
+            </p>
+
             {this.state.dealAmount != '' ? (
-              <p>Seller made a deal of {this.state.dealAmount} </p>
+              <p>
+                Seller made a deal of {this.state.dealAmount} 
+                &nbsp;
+                <Button 
+                  variant="outlined"
+                  size="small"
+                  color="primary" 
+                  type="submit" 
+                  className="acceptDeal btn btn-submit px-5 mt-4"
+                  onClick={() => {
+                    this.acceptDeal()
+                  }}
+                >
+                    Accept
+                </Button>
+                &nbsp;
+                <Button 
+                  variant="outlined"
+                  size="small"
+                  color="primary" 
+                  type="submit" 
+                  className="declineDeal btn btn-submit px-5 mt-4"
+                  onClick={() => {
+                    this.declineDeal()
+                  }}
+                >
+                    Decline
+                </Button>
+              </p> 
+              
+
             ):(
               <div  style={{ display: "none" }}></div>
             )}
         </div>
+
         <div className="chat-area" ref={this.myRef}>
           {/* loading indicator */}
           {this.state.loadingChats ? <div className="spinner-border text-success" role="status">
@@ -168,6 +220,7 @@ class ConnectedNegotiatePrice extends Component {
             </p>
           })}
         </div>
+
         <div className="chat-area-sendmsg">
           <form onSubmit={this.handleSubmit} className="mx-3">
             <textarea 
@@ -206,6 +259,7 @@ class ConnectedNegotiatePrice extends Component {
             <div  style={{ display: "none" }}></div>
           )}
         </div>
+
       </div>
     );
   }
