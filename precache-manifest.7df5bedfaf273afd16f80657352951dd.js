@@ -4,8 +4,8 @@ self.__precacheManifest = [
     "url": "/idken/favicon-16.png"
   },
   {
-    "revision": "1dc306fb1c6bec164c7b",
-    "url": "/idken/static/js/app.df368b38.chunk.js"
+    "revision": "7154bf26fa1ef7a994ca",
+    "url": "/idken/static/js/app.6112e896.chunk.js"
   },
   {
     "revision": "a093ab8facc7537ec62e",
@@ -32,7 +32,7 @@ self.__precacheManifest = [
     "url": "/idken/manifest.json"
   },
   {
-    "revision": "5752602f6e8a15e93327acc79490c3e8",
+    "revision": "3759a40073520440398050db4977d6f2",
     "url": "/idken/index.html"
   },
   {
