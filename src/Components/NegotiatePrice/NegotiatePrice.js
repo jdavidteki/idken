@@ -6,6 +6,7 @@ import "./NegotiatePrice.css";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Api from "../../Api";
 import { withRouter } from "react-router-dom";
+import { addItemInCart } from "../../Redux/Actions";
 
 class ConnectedNegotiatePrice extends Component {
   constructor(props) {
@@ -42,7 +43,7 @@ class ConnectedNegotiatePrice extends Component {
     this.getSellerName()
     this.buyerToUse = this.state.user.uid
    
-    if (this.state.user.uid == this.state.item.sellerId){
+    if (this.userIsSeller()){
       this.buyerToUse = this.props.location.state.clickedBuyerId
     }
 
@@ -70,7 +71,6 @@ class ConnectedNegotiatePrice extends Component {
     //use .on to only check when a new deal has been made
     try {
       Firebase.db().ref("deals/" + this.state.item.sellerId + "/" + this.props.match.params.id + "/" + this.buyerToUse ).on("value", snapshot => {
-        console.log("snapshot.val()", snapshot.val())
         this.setState({ dealAmount: snapshot.val().deal });
       });
     } catch (error) {
@@ -78,6 +78,10 @@ class ConnectedNegotiatePrice extends Component {
         this.setState({ readError: error.message, dealAmount: '' });
     }
 
+  }
+
+  userIsSeller = () => {
+    return this.state.item.sellerId == this.state.user.uid
   }
 
   handleChange(event) {
@@ -120,7 +124,7 @@ class ConnectedNegotiatePrice extends Component {
   }
 
   getSellerName = () => {
-    if (this.state.item.sellerId != this.state.user.uid){
+    if (!this.userIsSeller()){
       Firebase.getUserNameFromID(this.state.item.sellerId).
       then((val) => {
         this.setState({sellerName: val})
@@ -137,7 +141,12 @@ class ConnectedNegotiatePrice extends Component {
   }
 
   acceptDeal = () =>{
-    //
+    this.props.dispatch(
+      addItemInCart({
+        ...this.state.item,
+        quantity: 1
+      })
+    );
   }
 
   declineDeal = () =>{
@@ -169,41 +178,48 @@ class ConnectedNegotiatePrice extends Component {
               this.state.sellerName} 
             </p>
 
-            {this.state.dealAmount != '' ? (
+            {this.state.dealAmount != '' ?(
               <p>
                 Seller made a deal of {this.state.dealAmount} 
-                &nbsp;
-                <Button 
-                  variant="outlined"
-                  size="small"
-                  color="primary" 
-                  type="submit" 
-                  className="acceptDeal btn btn-submit px-5 mt-4"
-                  onClick={() => {
-                    this.acceptDeal()
-                  }}
-                >
-                    Accept
-                </Button>
-                &nbsp;
-                <Button 
-                  variant="outlined"
-                  size="small"
-                  color="primary" 
-                  type="submit" 
-                  className="declineDeal btn btn-submit px-5 mt-4"
-                  onClick={() => {
-                    this.declineDeal()
-                  }}
-                >
-                    Decline
-                </Button>
+                {!this.userIsSeller() ? 
+                  (
+                    <span>
+                      &nbsp;
+                      <Button 
+                        variant="outlined"
+                        size="small"
+                        color="primary" 
+                        type="submit" 
+                        className="acceptDeal btn btn-submit px-5 mt-4"
+                        onClick={() => {
+                          this.acceptDeal()
+                        }}
+                      >
+                          Add to Cart
+                      </Button>
+                      &nbsp;
+                      <Button 
+                        variant="outlined"
+                        size="small"
+                        color="primary" 
+                        type="submit" 
+                        className="declineDeal btn btn-submit px-5 mt-4"
+                        onClick={() => {
+                          this.declineDeal()
+                        }}
+                      >
+                          Decline
+                      </Button>
+                    </span>
+                  ):(
+                    <div  style={{ display: "none" }}></div>
+                  )  
+                }      
               </p> 
-              
-
             ):(
               <div  style={{ display: "none" }}></div>
             )}
+
         </div>
 
         <div className="chat-area" ref={this.myRef}>
@@ -239,7 +255,7 @@ class ConnectedNegotiatePrice extends Component {
                 Send
             </Button>
           </form>
-          {this.state.user.uid == this.state.item.sellerId ? (
+          {this.userIsSeller() ? (
             <form onSubmit={this.handleDealClick} className="chat-area-deal">
               <textarea className="deal-control" 
                 name="content" 
