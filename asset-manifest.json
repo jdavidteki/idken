@@ -1,7 +1,7 @@
 {
   "files": {
-    "app.js": "/idken/static/js/app.8f840a8b.chunk.js",
-    "app.js.map": "/idken/static/js/app.8f840a8b.chunk.js.map",
+    "app.js": "/idken/static/js/app.81e632da.chunk.js",
+    "app.js.map": "/idken/static/js/app.81e632da.chunk.js.map",
     "runtime~app.js": "/idken/static/js/runtime~app.b4a2df9d.js",
     "runtime~app.js.map": "/idken/static/js/runtime~app.b4a2df9d.js.map",
     "static/js/2.e98c41a8.chunk.js": "/idken/static/js/2.e98c41a8.chunk.js",
@@ -17,6 +17,6 @@
   "entrypoints": [
     "static/js/runtime~app.b4a2df9d.js",
     "static/js/2.e98c41a8.chunk.js",
-    "static/js/app.8f840a8b.chunk.js"
+    "static/js/app.81e632da.chunk.js"
   ]
 }
