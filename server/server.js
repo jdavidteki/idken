@@ -30,3 +30,4 @@ app.post("/create-payment-intent", async (req, res) => {
 });
 
 app.listen(4242, () => console.log('Node server listening on port 4242!'));
+//make this serverless and host it on aws lambda

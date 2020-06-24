@@ -148,13 +148,15 @@ class Firebase {
     })
   }
 
-  getNewDeal = (sellerId, buyerId, productId) =>{
+  sealDeal = (sellerId, productId, action) => {
     return new Promise((resolve, reject) => {
       this.db().
-      ref('/deals/' + sellerId + '/' + productId + '/' + buyerId + '/').
-      once('value').
-      then((snapshot) => {
-        resolve(snapshot.val())
+      ref('/deals/' + sellerId + '/' + productId + '/dealSealed/').
+      set({
+          dealSealed: action,
+       }).
+      then((val) => {
+        resolve(val)
       }).catch(error =>{
         reject(error)
       })

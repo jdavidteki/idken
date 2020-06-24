@@ -21,6 +21,7 @@ class ConnectedNegotiatePrice extends Component {
       item: null,
       sellerName: '',
       dealAmount: '',
+      itemOnDeal: false,
     };
     let buyerToUse = ""
     this.handleChange = this.handleChange.bind(this);
@@ -71,13 +72,26 @@ class ConnectedNegotiatePrice extends Component {
     //use .on to only check when a new deal has been made
     try {
       Firebase.db().ref("deals/" + this.state.item.sellerId + "/" + this.props.match.params.id + "/" + this.buyerToUse ).on("value", snapshot => {
-        this.setState({ dealAmount: snapshot.val().deal });
+        if (snapshot.val()){
+          this.setState({ dealAmount: snapshot.val().deal });
+        }
       });
     } catch (error) {
         console.log("error", error)
         this.setState({ readError: error.message, dealAmount: '' });
     }
 
+    //check if any customer has accepted a deal
+    try {
+      Firebase.db().ref("deals/" + this.state.item.sellerId + "/" + this.props.match.params.id + "/dealSealed/" ).on("value", snapshot => {
+        if (snapshot.val()){
+          this.setState({ itemOnDeal: snapshot.val().dealSealed });
+        }
+      });
+    } catch (error) {
+        console.log("error", error)
+        this.setState({ readError: error.message, dealAmount: '' });
+    }
   }
 
   userIsSeller = () => {
@@ -141,6 +155,8 @@ class ConnectedNegotiatePrice extends Component {
   }
 
   acceptDeal = () =>{
+    Firebase.sealDeal(this.state.item.sellerId, this.props.match.params.id, true)
+
     this.props.dispatch(
       addItemInCart({
         ...this.state.item,
@@ -157,6 +173,10 @@ class ConnectedNegotiatePrice extends Component {
 
     if (!this.state.item) {
         return null;
+    }
+
+    if (this.state.itemOnDeal){
+      return <p style={{ textAlign: "center", marginTop: "30%" }}>Seller has made an offer: this product is unavailable at the moment</p>
     }
 
     return (
