@@ -16,12 +16,12 @@ self.__precacheManifest = [
     "url": "/idken/static/media/logo.e0e01978.png"
   },
   {
-    "revision": "48c7ed4e7da9792af288a60d7242d615",
-    "url": "/idken/expo-service-worker.js"
-  },
-  {
     "revision": "ec543248d7b23864564429fc03837190",
     "url": "/idken/serve.json"
+  },
+  {
+    "revision": "48c7ed4e7da9792af288a60d7242d615",
+    "url": "/idken/expo-service-worker.js"
   },
   {
     "revision": "afd5733ac789ab1795f1ed7a26e1ecd3",
