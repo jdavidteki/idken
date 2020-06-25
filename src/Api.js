@@ -1,15 +1,23 @@
-import { sampleProducts } from "./Data";
+import Firebase from "./Firebase/firebase.js";
 
-///
-//
-// Methods of this class are used to simulate calls to server.
-//
 class Api {
+  constructor(props) {
+    Firebase.initializeApp()
+  }
+
   getItemUsingID(id) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-        let res = sampleProducts.filter(x => x.id === parseInt(id, 10));
-        resolve(res.length === 0 ? null : res[0]);
+        Firebase.getAllProducts().
+        then(val => {
+          var allProducts = []
+          for (var i = 0; i < val.length; i++) {
+            allProducts.push(Object.values(val[i])[0])
+          }
+
+          let res = allProducts.filter(x => x.id === parseInt(id, 10));
+          resolve(res.length === 0 ? null : res[0]);
+        })
       }, 500);
     });
   }
@@ -45,35 +53,42 @@ class Api {
     return new Promise((resolve, reject) => {
 
       setTimeout(() => {
-
-        let data = sampleProducts.filter(item => {
-          if (
-            usePriceFilter &&
-            (item.price < minPrice || item.price > maxPrice)
-          ) {
-            return false;
+        Firebase.getAllProducts().
+        then(val => {
+          var allProducts = []
+          for (var i = 0; i < val.length; i++) {
+            allProducts.push(Object.values(val[i])[0])
           }
 
-          if (category === "popular") {
-            return item.popular;
-          }
-
-          if (category !== "All categories" && category !== item.category)
-            return false;
-
-          if (term && !item.name.toLowerCase().includes(term.toLowerCase()))
-            return false;
-
-          return true;
-        });
-
-        let totalLength = data.length;
-
-        data = this.sortByPrice(data, sortValue);
-
-        data = data.slice((page - 1) * itemsPerPage, page * itemsPerPage);
-
-        resolve({ data, totalLength });
+          let data = allProducts.filter(item => {
+            if (
+              usePriceFilter &&
+              (item.price < minPrice || item.price > maxPrice)
+            ) {
+              return false;
+            }
+  
+            if (category === "popular") {
+              return item.popular;
+            }
+  
+            if (category !== "All categories" && category !== item.category)
+              return false;
+  
+            if (term && !item.name.toLowerCase().includes(term.toLowerCase()))
+              return false;
+  
+            return true;
+          });
+  
+          let totalLength = data.length;
+  
+          data = this.sortByPrice(data, sortValue);
+  
+          data = data.slice((page - 1) * itemsPerPage, page * itemsPerPage);
+  
+          resolve({ data, totalLength });
+        })
       }, 500);
     });
   }

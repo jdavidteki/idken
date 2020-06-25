@@ -163,6 +163,46 @@ class Firebase {
     })
   }
 
+
+  ceateNewProduct = (productInfo) =>{
+    return new Promise((resolve, reject) => {
+      this.db().
+      ref('/products/' + productInfo.id + '/').
+      push({
+          id: productInfo.id,
+          name: productInfo.name,
+          category: productInfo.category,
+          sellerId: productInfo.sellerId,
+          price: productInfo.price,
+          description: productInfo.description,
+          popular: productInfo.popular,
+          imageUrls: productInfo.imageUrls
+       }).
+      then(() => {
+        resolve(true)
+      }).catch(error =>{
+        reject(error)
+      })
+    })
+  }
+
+  getAllProducts = () => {
+    return new Promise((resolve, reject) => {
+      this.db().
+      ref('/products/').
+      once('value').
+      then(snapshot => {
+        if (snapshot.val()){
+            resolve(Object.values(snapshot.val()))
+          }else{
+            resolve({})
+        }
+      }).
+      catch(error => {
+        reject(error)
+      })
+    })
+  }
 }
 
 export default new Firebase();
