@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import "./AllNegotiations.css";
 import { withRouter } from "react-router-dom";
-import Firebase from "../../Firebase/Firebase.js";
+import Firebase from "../../Firebase/firebase.js";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import {
     SafeAreaView, 
@@ -77,6 +77,14 @@ class ConnectedAllNegotiations extends Component {
     }
   
     render() {
+        if (!this.state.loadedNego && this.state.allChatsOnProduct.length == 0){
+            return (
+                <div style={{ textAlign: "center", marginTop: "30%" }}>
+                    There are no negotiations for this product at this time
+                </div>
+            )
+        }
+
         if (this.props.loggedInUser && !this.state.loadedNego){
             this.loadAllNegotiations()
         }

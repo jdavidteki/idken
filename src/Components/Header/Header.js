@@ -11,7 +11,7 @@ import { connect } from "react-redux";
 import {
   showCartDlg,
   toggleMenu,
-  logout
+  logout,
 } from "../../Redux/Actions";
 import cartImage from "../../Images/logo.png";
 import Auth from "../../Auth";
@@ -24,10 +24,10 @@ import Select from "@material-ui/core/Select";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import { setLoggedInUser } from "../../Redux/Actions";
+import Firebase from "../../Firebase/firebase.js";
 
 const mapStateToProps = state => {
   return {
-    nrOfItemsInCard: state.cartItems.length,
     loggedInUser: state.loggedInUser
   };
 };
@@ -45,20 +45,37 @@ class ConnectedHeader extends Component {
   state = {
     searchTerm: "",
     anchorEl: null,
-    categoryFilterValue: categories[0].name
+    categoryFilterValue: categories[0].name,
+    nrOfItemsInCart: 0,
+    cartItemsLoaded: false,
   };
 
-  componentDidMount(){
+  loadCartItems = () => {
     let user = JSON.parse(localStorage.getItem('loggedInUser'));
 
     if (user) {
-      this.props.dispatch(setLoggedInUser({ name: user.name, uid: user.uid }));
+      try {
+        Firebase.db().ref("carts/" + user.uid).on("value", snapshot => {
+          if (snapshot.val()){
+            this.props.dispatch(setLoggedInUser({ name: user.name, uid: user.uid }));
+            this.setState({ nrOfItemsInCart: Object.keys(snapshot.val()).length, cartItemsLoaded: true });
+          }else{
+            this.setState({nrOfItemsInCart: 0, cartItemsLoaded: true})
+          }
+        });
+      } catch (error) {
+        console.log("error", error)
+      }
     }
   }
 
   render() {
-    let { anchorEl } = this.state;
+    if (!this.state.cartItemsLoaded){
+      this.loadCartItems()
+    }
 
+    let { anchorEl } = this.state;
+    
     return (
       <AppBar
         position="static"
@@ -128,7 +145,7 @@ class ConnectedHeader extends Component {
                 style={{ marginRight: 20 }}
                 color="primary"
                 onClick={() => {
-                  this.props.history.push("/login");
+                  this.props.history.push("/idken/login");
                 }}
               >
                 Log in
@@ -143,16 +160,18 @@ class ConnectedHeader extends Component {
                   <Person />
                 </Avatar>
               )}
-            <IconButton
-              aria-label="Cart"
-              onClick={() => {
-                this.props.dispatch(showCartDlg(true));
-              }}
-            >
-              <Badge badgeContent={this.props.nrOfItemsInCard} color="primary">
-                <ShoppingCartIcon />
-              </Badge>
-            </IconButton>
+            {this.props.loggedInUser ? (
+              <IconButton
+                aria-label="Cart"
+                onClick={() => {
+                  this.props.dispatch(showCartDlg(true));
+                }}
+              >
+                <Badge badgeContent={this.state.nrOfItemsInCart} color="primary">
+                  <ShoppingCartIcon />
+                </Badge>
+              </IconButton>
+            ):(<div  style={{ display: "none" }}></div>)}
             <Menu
               anchorEl={anchorEl}
               open={Boolean(anchorEl)}
@@ -163,7 +182,7 @@ class ConnectedHeader extends Component {
               <MenuItem
                 onClick={() => {
                   this.setState({ anchorEl: null });
-                  this.props.history.push("/order");
+                  this.props.history.push("/idken/order");
                 }}
               >
                 Checkout page
@@ -171,10 +190,10 @@ class ConnectedHeader extends Component {
               <MenuItem
                 onClick={() => {
                   Auth.signout(() => {
-                    this.props.history.push("/");
+                    this.props.history.push("/idken/");
                     this.props.dispatch(logout());
                   });
-                  this.setState({ anchorEl: null });
+                  this.setState({ anchorEl: null, cartItemsLoaded: false});
                   localStorage.removeItem('loggedInUser');
                 }}
               >

@@ -6,7 +6,7 @@ import Button from "@material-ui/core/Button";
 import { setLoggedInUser } from "../../Redux/Actions";
 import Avatar from '@material-ui/core/Avatar';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Firebase from "../../Firebase/Firebase.js";
+import Firebase from "../../Firebase/firebase.js";
 
 class ConnectedLogin extends Component {
   state = {
@@ -21,7 +21,7 @@ class ConnectedLogin extends Component {
   }
 
   render() {
-    const { from } = this.props.location.state || { from: { pathname: "/" } };
+    const { from } = this.props.location.state || { from: { pathname: "/idken" } };
 
     // If user was authenticated, redirect her to where she came from.
     if (this.state.redirectToReferrer === true) {
@@ -111,7 +111,7 @@ class ConnectedLogin extends Component {
             variant="outlined"
             color="primary"
             onClick={() => {
-              this.props.history.push("/signup");
+              this.props.history.push("/idken/signup");
             }}
           >
             Sign Up

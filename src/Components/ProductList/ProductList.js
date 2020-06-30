@@ -45,7 +45,7 @@ class ProductList extends Component {
   updateQueryString(newValues) {
     let currentQS = queryString.parse(this.props.location.search);
     let newQS = { ...currentQS, ...newValues };
-    this.props.history.push("/?" + queryString.stringify(newQS));
+    this.props.history.push("/idken/?" + queryString.stringify(newQS));
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {

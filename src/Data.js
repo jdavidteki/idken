@@ -30,7 +30,7 @@ const categories = [
 // Data for rendering menu.
 const dataForTheMenu = [
   { name: "Home page", 
-    url: "/", 
+    url: "/idken/", 
     icon: "home", 
     id: 0 
   },
@@ -42,7 +42,7 @@ const dataForTheMenu = [
       return {
         name: x.name,
         id: i,
-        url: "/?category=" + x.name,
+        url: "/idken?category=" + x.name,
         icon: x.icon
       };
     })
@@ -50,7 +50,7 @@ const dataForTheMenu = [
   {
     name: "ICT Academy",
     id: 2,
-    url: "/ictacademy",
+    url: "/idken/ictacademy",
     icon: "ict_academy",
   },
 

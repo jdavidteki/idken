@@ -6,7 +6,7 @@ import Button from "@material-ui/core/Button";
 import { setLoggedInUser } from "../../Redux/Actions";
 import Avatar from '@material-ui/core/Avatar';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Firebase from "../../Firebase/Firebase.js";
+import Firebase from "../../Firebase/firebase.js";
 
 class ConnectedSignUp extends Component {
   state = {

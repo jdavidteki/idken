@@ -1,4 +1,5 @@
 import * as CONSTANTS from "./Constants";
+import firebase from "../Firebase/firebase.js"
 
 // If multiple components need access to some data, in that case we store such data in redux.
 const initialState = {
@@ -11,24 +12,6 @@ const initialState = {
 
 const rootReducer = (state = initialState, action) => {
   switch (action.type) {
-    case CONSTANTS.ADD_ITEM_IN_CART: {
-      let index = state.cartItems.findIndex(x => x.id === action.payload.id);
-
-      // Is the item user wants to add already in the cart?
-      if (index !== -1) {
-        // Yes, update the quantity.
-        let cloneCartItems = [...state.cartItems];
-        cloneCartItems[index] = {
-          ...cloneCartItems[index],
-          quantity: state.cartItems[index].quantity + action.payload.quantity
-        };
-
-        return { ...state, cartItems: cloneCartItems };
-      }
-
-      // No, add a new item.
-      return { ...state, cartItems: state.cartItems.concat(action.payload) };
-    }
     case CONSTANTS.SHOW_CART_DLG:
       return { ...state, showCartDialog: action.payload };
     case CONSTANTS.DELETE_CART_ITEM:

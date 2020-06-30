@@ -26,15 +26,15 @@ class App extends Component {
           <div className="content">
             <CartDialog />
             <Switch>
-              <Route path="/" exact component={ProductList} />
-              <Route path="/details/:id" component={Details} />
-              <Route path="/login" component={Login} />
-              <Route path="/signup" component={SignUp} />
-              <Route path="/ictacademy" component={IctAcademy} />
-              <Route path="/payment" component={PaymentForm} />
-              <Route path="/negotiateprice/:id" component={NegotiatePrice} />
-              <Route path="/allnegotiations/:id" component={AllNegotiations} />
-              <ProtectedRoute path="/order" component={Order} />
+              <Route path="/idken/" exact component={ProductList} />
+              <Route path="/idken/details/:id" component={Details} />
+              <Route path="/idken/login" component={Login} />
+              <Route path="/idken/signup" component={SignUp} />
+              <Route path="/idken/ictacademy" component={IctAcademy} />
+              <Route path="/idken/payment" component={PaymentForm} />
+              <Route path="/idken/negotiateprice/:id" component={NegotiatePrice} />
+              <Route path="/idken/allnegotiations/:id" component={AllNegotiations} />
+              <ProtectedRoute path="/idken/order" component={Order} />
               <Route
                 component={() => (
                   <div style={{ padding: 20 }}>Page not found</div>

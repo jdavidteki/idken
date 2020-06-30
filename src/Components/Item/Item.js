@@ -3,7 +3,7 @@ import IconButton from "@material-ui/core/IconButton";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import ForumIcon from '@material-ui/icons/Forum';
 import { connect } from "react-redux";
-import { addItemInCart } from "../../Redux/Actions";
+import  Firebase from "../../Firebase/firebase.js"
 import { withRouter } from "react-router-dom";
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
@@ -13,6 +13,7 @@ import CardMedia from "@material-ui/core/CardMedia";
 import Tooltip from "@material-ui/core/Tooltip";
 import Button from "@material-ui/core/Button";
 
+
 class ConnectedItem extends Component {
   render() {
     return (
@@ -21,7 +22,7 @@ class ConnectedItem extends Component {
       >
         <CardActionArea
           onClick={() => {
-            this.props.history.push("/details/" + this.props.item.id);
+            this.props.history.push("/idken/details/" + this.props.item.id);
           }}
         >
           <CardMedia
@@ -53,7 +54,7 @@ class ConnectedItem extends Component {
             size="small"
             style={{ marginRight: 50 }}
             onClick={() => {
-              this.props.history.push("/details/" + this.props.item.id);
+              this.props.history.push("/idken/details/" + this.props.item.id);
             }}
           >
             {" "}
@@ -64,9 +65,7 @@ class ConnectedItem extends Component {
               size="small"
               onClick={e => {
                 e.stopPropagation();
-                this.props.dispatch(
-                  addItemInCart({ ...this.props.item, quantity: 1 })
-                );
+                Firebase.addItemToCart({ item: this.props.item, quantity: 1, uid: this.props.loggedInUser.uid})
               }}
               color="primary"
               aria-label="Add to shopping cart"
@@ -83,9 +82,9 @@ class ConnectedItem extends Component {
 
                 if (this.props.loggedInUser.uid == this.props.item.sellerId){
                     //call seller view negotiation view
-                    this.props.history.push("/allnegotiations/" + this.props.item.id);
+                    this.props.history.push("/idken/allnegotiations/" + this.props.item.id);
                   } else {
-                    this.props.history.push("/negotiateprice/" + this.props.item.id);
+                    this.props.history.push("/idken/negotiateprice/" + this.props.item.id);
                   }
                 }}
                 color="primary"

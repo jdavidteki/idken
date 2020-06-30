@@ -203,6 +203,55 @@ class Firebase {
       })
     })
   }
+
+  getItemsInUserCart = (uid) => {
+    return new Promise((resolve, reject) => {
+      this.db().
+      ref('/carts/' + uid).
+      once('value').
+      then(snapshot => {
+        resolve(snapshot.val())
+      }).
+      catch(error => {
+        reject(error)
+      })
+    })
+  }
+
+  addItemToCart = (obj) => {
+    this.db().
+    ref('/carts/' + obj.uid).
+    once('value', snapshot => {
+      let val = [];
+      let allItems = [];
+      
+      if (snapshot.val()) {
+        val = Object.values(snapshot.val())
+        for (var i = 0; i < val.length; i++) {
+          allItems.push({...val[i].item})
+        }
+      }
+
+      let index = allItems.findIndex(x => x.id === obj.item.id);
+      // Is the item user wants to add already in the cart?
+      if (index !== -1) {
+        this.db().
+        ref('/carts/').
+        child(obj.uid + '/' + obj.item.id + '/item/').
+        update({
+          quantity: allItems[index].quantity + obj.quantity,
+        })
+
+      }else{
+        this.db().
+        ref('/carts/').
+        child(obj.uid + '/' + obj.item.id).
+        set({
+          item: {...obj.item, quantity: obj.quantity,},
+        })
+      }
+    })
+  }
 }
 
 export default new Firebase();

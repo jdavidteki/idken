@@ -13,14 +13,50 @@ import CartRow from "./CartRow";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCartOutlined";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
+import Firebase from "../../Firebase/firebase.js";
 
 const mapStateToProps = state => {
-  return { open: state.showCartDialog, items: state.cartItems };
+  return { 
+    open: state.showCartDialog,
+    loggedInUser: state.loggedInUser 
+  };
 };
 
 class ConnectedCartDialog extends Component {
+  state = {
+    items: [],
+    itemsLoaded: false,
+  }
+
+  loadAllItemsInCart = () => {
+    let user = JSON.parse(localStorage.getItem('loggedInUser'));
+
+    try {
+      Firebase.db().ref("carts/" + user.uid).once("value", snapshot => {
+        if (snapshot.val()){
+          let val = Object.values(snapshot.val())
+          let allProducts = []
+
+          for (var i = 0; i < val.length; i++) {
+            allProducts.push({...val[i].item})
+          }
+
+          this.setState({ items: allProducts, itemsLoaded: true });
+        }else{
+          this.setState({ items: [], itemsLoaded: true });
+        }
+      });
+    } catch (error) {
+      console.log("error", error)
+    }
+  }
+
   render() {
-    let totalPrice = this.props.items.reduce((accumulator, item) => {
+    if (this.props.open && !this.state.itemsLoaded){
+      this.loadAllItemsInCart()
+    }
+
+    let totalPrice = this.state.items.reduce((accumulator, item) => {
       return accumulator + item.price * item.quantity;
     }, 0);
 
@@ -29,6 +65,7 @@ class ConnectedCartDialog extends Component {
         <Dialog
           open={this.props.open}
           onClose={() => {
+            this.setState({itemsLoaded: false });
             this.props.dispatch(showCartDlg(false));
           }}
         >
@@ -59,7 +96,7 @@ class ConnectedCartDialog extends Component {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {this.props.items.map((item, index) => {
+                {this.state.items.map((item, index) => {
                   return <CartRow item={item} key={item.id} {...this.props} />;
                 })}
               </TableBody>
@@ -80,9 +117,10 @@ class ConnectedCartDialog extends Component {
               color="primary"
               disabled={totalPrice === 0}
               onClick={() => {
+                this.setState({itemsLoaded: false });
                 this.props.dispatch(showCartDlg(false));
-                this.props.dispatch(setCheckedOutItems(this.props.items));
-                this.props.history.push("/order");
+                this.props.dispatch(setCheckedOutItems(this.state.items));
+                this.props.history.push("/idken/order");
               }}
             >
               Checkout

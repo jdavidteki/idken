@@ -63,7 +63,7 @@ class ConnectedOrder extends Component {
           variant="outlined"
           disabled={totalPrice === 0}
           onClick={() => {
-            this.props.history.push("/payment");
+            this.props.history.push("/idken/payment");
           }}
           style={{ margin: 5, marginTop: 30 }}
         >

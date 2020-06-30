@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Firebase from "../../Firebase/Firebase.js";
+import Firebase from "../../Firebase/firebase.js";
 import Button from "@material-ui/core/Button";
 import { connect } from "react-redux";
 import "./NegotiatePrice.css";
@@ -176,7 +176,11 @@ class ConnectedNegotiatePrice extends Component {
     }
 
     if (this.state.itemOnDeal){
-      return <p style={{ textAlign: "center", marginTop: "30%" }}>Seller has made an offer: this product is unavailable at the moment</p>
+      return (
+        <p style={{ textAlign: "center", marginTop: "30%" }}>
+          Seller has made an offer: this product is unavailable at the moment
+        </p>
+      )
     }
 
     return (
