@@ -252,6 +252,45 @@ class Firebase {
       }
     })
   }
+
+  updateCartItemQnt = (obj) => {
+    this.db().
+    ref('/carts/' + obj.uid).
+    once('value', snapshot => {
+      let val = [];
+      let allItems = [];
+      
+      if (snapshot.val()) {
+        val = Object.values(snapshot.val())
+        for (var i = 0; i < val.length; i++) {
+          allItems.push({...val[i].item})
+        }
+      }
+
+      let index = allItems.findIndex(x => x.id === obj.id);
+
+      if (index !== -1) {
+        this.db().
+        ref('/carts/').
+        child(obj.uid + '/' + obj.id + '/item/').
+        update({
+          quantity: obj.quantity,
+        })
+      }
+    })
+  }
+
+  deleteItemFromCart = (obj) => {
+    return new Promise(resolve => {
+      this.db().
+      ref('/carts/' + obj.uid).
+      child(obj.id).
+      remove().
+      then(() => {
+        resolve(true)
+      })
+    })
+  }
 }
 
 export default new Firebase();

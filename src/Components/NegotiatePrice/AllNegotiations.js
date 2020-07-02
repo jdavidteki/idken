@@ -61,7 +61,7 @@ class ConnectedAllNegotiations extends Component {
 
     onPress = (item) =>{
         this.props.history.push({
-            pathname: "/negotiateprice/" + this.props.match.params.id,
+            pathname: "/idken/negotiateprice/" + this.props.match.params.id,
             state: { clickedBuyerId: item["id"], clickedBuyerName: item["name"] }
         });
     }
@@ -77,7 +77,7 @@ class ConnectedAllNegotiations extends Component {
     }
   
     render() {
-        if (!this.state.loadedNego && this.state.allChatsOnProduct.length == 0){
+        if (this.state.loadedNego && this.state.allChatsOnProduct.length == 0){
             return (
                 <div style={{ textAlign: "center", marginTop: "30%" }}>
                     There are no negotiations for this product at this time

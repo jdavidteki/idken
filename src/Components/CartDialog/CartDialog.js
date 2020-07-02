@@ -32,7 +32,7 @@ class ConnectedCartDialog extends Component {
     let user = JSON.parse(localStorage.getItem('loggedInUser'));
 
     try {
-      Firebase.db().ref("carts/" + user.uid).once("value", snapshot => {
+      Firebase.db().ref("carts/" + user.uid).on("value", snapshot => {
         if (snapshot.val()){
           let val = Object.values(snapshot.val())
           let allProducts = []

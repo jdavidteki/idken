@@ -6,7 +6,6 @@ import "./NegotiatePrice.css";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Api from "../../Api";
 import { withRouter } from "react-router-dom";
-import { addItemInCart } from "../../Redux/Actions";
 
 class ConnectedNegotiatePrice extends Component {
   constructor(props) {
@@ -155,14 +154,8 @@ class ConnectedNegotiatePrice extends Component {
   }
 
   acceptDeal = () =>{
-    Firebase.sealDeal(this.state.item.sellerId, this.props.match.params.id, true)
-
-    this.props.dispatch(
-      addItemInCart({
-        ...this.state.item,
-        quantity: 1
-      })
-    );
+    Firebase.sealDeal(this.state.item.sellerId, this.props.match.params.id, true);
+    Firebase.addItemToCart({item: this.state.item, quantity: 1, uid: this.state.user.uid});
   }
 
   declineDeal = () =>{
