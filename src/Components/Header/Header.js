@@ -50,14 +50,23 @@ class ConnectedHeader extends Component {
     cartItemsLoaded: false,
   };
 
-  loadCartItems = () => {
+  componentDidMount(){
     let user = JSON.parse(localStorage.getItem('loggedInUser'));
 
+    if (user != null){
+      this.props.dispatch(setLoggedInUser({ name: user.name, uid: user.uid }));
+
+      if(!this.state.cartItemsLoaded){
+        this.getNoItemInCart(user);
+      }
+    }
+  }
+
+  getNoItemInCart = (user) => {
     if (user) {
       try {
         Firebase.db().ref("carts/" + user.uid).on("value", snapshot => {
           if (snapshot.val()){
-            this.props.dispatch(setLoggedInUser({ name: user.name, uid: user.uid }));
             this.setState({ nrOfItemsInCart: Object.keys(snapshot.val()).length, cartItemsLoaded: true });
           }else{
             this.setState({nrOfItemsInCart: 0, cartItemsLoaded: true})
@@ -70,8 +79,8 @@ class ConnectedHeader extends Component {
   }
 
   render() {
-    if (!this.state.cartItemsLoaded){
-      this.loadCartItems()
+    if(!this.state.cartItemsLoaded && this.props.loggedInUser != null){
+      this.getNoItemInCart(this.props.loggedInUser)
     }
 
     let { anchorEl } = this.state;

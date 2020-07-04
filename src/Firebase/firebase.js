@@ -280,13 +280,26 @@ class Firebase {
     })
   }
 
+  deleteDeal = (product) => {
+    return new Promise(resolve => {
+      this.db().
+      ref('/deals/' + product.sellerId).
+      child(product.id).
+      remove().
+      then(() => {
+        resolve(true)
+      })
+    })
+  }
+
   deleteItemFromCart = (obj) => {
     return new Promise(resolve => {
       this.db().
       ref('/carts/' + obj.uid).
-      child(obj.id).
+      child(obj.product.id).
       remove().
       then(() => {
+        this.deleteDeal(obj.product)
         resolve(true)
       })
     })

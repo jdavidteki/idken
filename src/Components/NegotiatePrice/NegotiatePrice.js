@@ -20,7 +20,8 @@ class ConnectedNegotiatePrice extends Component {
       item: null,
       sellerName: '',
       dealAmount: '',
-      itemOnDeal: false,
+      itemOnDeal: 'no',
+      dealNotDeclined: 'yes',
     };
     let buyerToUse = ""
     this.handleChange = this.handleChange.bind(this);
@@ -84,12 +85,12 @@ class ConnectedNegotiatePrice extends Component {
     try {
       Firebase.db().ref("deals/" + this.state.item.sellerId + "/" + this.props.match.params.id + "/dealSealed/" ).on("value", snapshot => {
         if (snapshot.val()){
-          this.setState({ itemOnDeal: snapshot.val().dealSealed });
+          this.setState({ itemOnDeal: snapshot.val().dealSealed, dealNotDeclined: snapshot.val().dealSealed});
         }
       });
     } catch (error) {
-        console.log("error", error)
-        this.setState({ readError: error.message, dealAmount: '' });
+      console.log("error", error)
+      this.setState({ readError: error.message, itemOnDeal:'no', dealAmount: '' });
     }
   }
 
@@ -130,6 +131,7 @@ class ConnectedNegotiatePrice extends Component {
   handleDealClick = (event) => {
     event.preventDefault()
     if( !isNaN(this.state.dealValue)){
+      Firebase.sealDeal(this.state.item.sellerId, this.props.match.params.id, '');
       Firebase.sendNewDeal(this.state.item.sellerId, this.buyerToUse, this.props.match.params.id, this.state.dealValue)
     }else{
       this.setState({dealError: 'Ivalid Deal Number'})
@@ -154,27 +156,32 @@ class ConnectedNegotiatePrice extends Component {
   }
 
   acceptDeal = () =>{
-    Firebase.sealDeal(this.state.item.sellerId, this.props.match.params.id, true);
+    Firebase.sealDeal(this.state.item.sellerId, this.props.match.params.id, 'yes');
     Firebase.addItemToCart({item: this.state.item, quantity: 1, uid: this.state.user.uid});
   }
 
   declineDeal = () =>{
-    //
+    Firebase.sealDeal(this.state.item.sellerId, this.props.match.params.id, 'no');
   }
 
   render() {
-
     if (!this.state.item) {
         return null;
     }
 
-    if (this.state.itemOnDeal){
+    if (this.state.itemOnDeal == 'yes'){
       return (
         <p style={{ textAlign: "center", marginTop: "30%" }}>
           Seller has made an offer: this product is unavailable at the moment
         </p>
       )
     }
+
+    // if user goes to a random url like http://localhost:19006/idken/negotiateprice/7 without logging, they should be redirected to the login page and then redirected to that page
+    // if (this.props.loggedInUser == null){
+    //   this.props.history.push("/idken/login")
+    //   return null
+    // }
 
     return (
       <div className="chat-area-container">
@@ -195,9 +202,9 @@ class ConnectedNegotiatePrice extends Component {
               this.state.sellerName} 
             </p>
 
-            {this.state.dealAmount != '' ?(
+            {this.state.dealAmount != '' && this.state.dealNotDeclined != 'no' ?(
               <p>
-                Seller made a deal of {this.state.dealAmount} 
+                Pending: seller made a deal offer of {this.state.dealAmount}
                 {!this.userIsSeller() ? 
                   (
                     <span>

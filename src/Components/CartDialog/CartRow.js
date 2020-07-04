@@ -58,7 +58,7 @@ class CartRow extends Component {
             color="secondary"
             onClick={() => {
               this.setState({hideRow: true})
-              Firebase.deleteItemFromCart({id: this.props.item.id, uid: this.props.loggedInUser.uid})
+              Firebase.deleteItemFromCart({product: this.props.item, uid: this.props.loggedInUser.uid})
             }}
           >
             Delete
