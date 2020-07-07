@@ -1,12 +1,12 @@
 import * as CONSTANTS from "./Constants";
-import firebase from "../Firebase/firebase.js"
 
 // If multiple components need access to some data, in that case we store such data in redux.
 const initialState = {
   showCartDialog: false,
   showMenu: true,
   checkedOutItems: [],
-  loggedInUser: null
+  loggedInUser: null,
+  someoneLoggedIn: false,
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -16,9 +16,9 @@ const rootReducer = (state = initialState, action) => {
     case CONSTANTS.TOGGLE_MENU:
       return { ...state, showMenu: !state.showMenu };
     case CONSTANTS.SET_LOGGED_IN_USER:
-      return { ...state, loggedInUser: action.payload };
+      return { ...state, loggedInUser: action.payload, someoneLoggedIn: true };
     case CONSTANTS.LOGOUT:
-      return { ...state, loggedInUser: null, checkedOutItems: [] };
+      return { ...state, loggedInUser: null, checkedOutItems: [], someoneLoggedIn: false };
     case CONSTANTS.SET_CHECKEDOUT_ITEMS:
       return { ...state, checkedOutItems: action.payload };
     default:

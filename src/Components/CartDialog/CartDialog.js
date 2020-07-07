@@ -18,21 +18,25 @@ import Firebase from "../../Firebase/firebase.js";
 const mapStateToProps = state => {
   return { 
     open: state.showCartDialog,
-    loggedInUser: state.loggedInUser 
+    loggedInUser: state.loggedInUser,
+    someoneLoggedIn: state.someoneLoggedIn,
   };
 };
 
 class ConnectedCartDialog extends Component {
   state = {
     items: [],
-    itemsLoaded: false,
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (prevProps.someoneLoggedIn !== this.props.someoneLoggedIn) {
+      this.loadAllItemsInCart()
+    }
   }
 
   loadAllItemsInCart = () => {
-    let user = JSON.parse(localStorage.getItem('loggedInUser'));
-
     try {
-      Firebase.db().ref("carts/" + user.uid).on("value", snapshot => {
+      Firebase.db().ref("carts/" + this.props.loggedInUser.uid).on("value", snapshot => {
         if (snapshot.val()){
           let val = Object.values(snapshot.val())
           let allProducts = []
@@ -41,9 +45,9 @@ class ConnectedCartDialog extends Component {
             allProducts.push({...val[i].item})
           }
 
-          this.setState({ items: allProducts, itemsLoaded: true });
+          this.setState({ items: allProducts});
         }else{
-          this.setState({ items: [], itemsLoaded: true });
+          this.setState({ items: []});
         }
       });
     } catch (error) {
@@ -52,10 +56,6 @@ class ConnectedCartDialog extends Component {
   }
 
   render() {
-    if (this.props.open && !this.state.itemsLoaded){
-      this.loadAllItemsInCart()
-    }
-
     let totalPrice = this.state.items.reduce((accumulator, item) => {
       return accumulator + item.price * item.quantity;
     }, 0);

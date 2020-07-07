@@ -23,12 +23,13 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
-import { setLoggedInUser } from "../../Redux/Actions";
 import Firebase from "../../Firebase/firebase.js";
+import { setLoggedInUser } from "../../Redux/Actions";
 
 const mapStateToProps = state => {
   return {
-    loggedInUser: state.loggedInUser
+    loggedInUser: state.loggedInUser,
+    someoneLoggedIn: state.someoneLoggedIn,
   };
 };
 
@@ -47,7 +48,6 @@ class ConnectedHeader extends Component {
     anchorEl: null,
     categoryFilterValue: categories[0].name,
     nrOfItemsInCart: 0,
-    cartItemsLoaded: false,
   };
 
   componentDidMount(){
@@ -55,34 +55,30 @@ class ConnectedHeader extends Component {
 
     if (user != null){
       this.props.dispatch(setLoggedInUser({ name: user.name, uid: user.uid }));
-
-      if(!this.state.cartItemsLoaded){
-        this.getNoItemInCart(user);
-      }
     }
   }
 
-  getNoItemInCart = (user) => {
-    if (user) {
-      try {
-        Firebase.db().ref("carts/" + user.uid).on("value", snapshot => {
-          if (snapshot.val()){
-            this.setState({ nrOfItemsInCart: Object.keys(snapshot.val()).length, cartItemsLoaded: true });
-          }else{
-            this.setState({nrOfItemsInCart: 0, cartItemsLoaded: true})
-          }
-        });
-      } catch (error) {
-        console.log("error", error)
-      }
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if ((prevProps.someoneLoggedIn !== this.props.someoneLoggedIn) && this.props.someoneLoggedIn) {
+      this.getNoItemInCart()
+    }
+  }
+
+  getNoItemInCart = () => {
+    try {
+      Firebase.db().ref("carts/" + this.props.loggedInUser.uid).on("value", snapshot => {
+        if (snapshot.val()){
+          this.setState({ nrOfItemsInCart: Object.keys(snapshot.val()).length,  });
+        }else{
+          this.setState({nrOfItemsInCart: 0, })
+        }
+      });
+    } catch (error) {
+      console.log("error", error)
     }
   }
 
   render() {
-    if(!this.state.cartItemsLoaded && this.props.loggedInUser != null){
-      this.getNoItemInCart(this.props.loggedInUser)
-    }
-
     let { anchorEl } = this.state;
     
     return (
@@ -148,7 +144,7 @@ class ConnectedHeader extends Component {
             </Button>
           </div>
           <div className="right-part">
-            {!this.props.loggedInUser ? (
+            {!this.props.someoneLoggedIn ? (
               <Button
                 variant="outlined"
                 style={{ marginRight: 20 }}
@@ -169,7 +165,7 @@ class ConnectedHeader extends Component {
                   <Person />
                 </Avatar>
               )}
-            {this.props.loggedInUser ? (
+            {this.props.someoneLoggedIn ? (
               <IconButton
                 aria-label="Cart"
                 onClick={() => {
@@ -202,13 +198,13 @@ class ConnectedHeader extends Component {
                     this.props.history.push("/idken/");
                     this.props.dispatch(logout());
                   });
-                  this.setState({ anchorEl: null, cartItemsLoaded: false});
+                  this.setState({ anchorEl: null});
                   localStorage.removeItem('loggedInUser');
                 }}
               >
                 Logout
               </MenuItem>
-              { this.props.loggedInUser ? (
+              { this.props.someoneLoggedIn ? (
                   <MenuItem>
                     {this.props.loggedInUser.name}
                   </MenuItem>
