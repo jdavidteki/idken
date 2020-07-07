@@ -204,13 +204,19 @@ class ConnectedHeader extends Component {
               >
                 Logout
               </MenuItem>
-              { this.props.someoneLoggedIn ? (
-                  <MenuItem>
+              { this.props.someoneLoggedIn ? 
+                (
+                  <MenuItem
+                    onClick={() => {
+                      this.props.history.push("/idken/profile");
+                    }}
+                  >
                     {this.props.loggedInUser.name}
                   </MenuItem>
                 ):(
                   <TextField></TextField>
-                )}
+                )
+              }
             </Menu>
           </div>
         </Toolbar>

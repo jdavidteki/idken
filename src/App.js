@@ -15,6 +15,7 @@ import Footer from "./Components/Footer/Footer";
 import IctAcademy from "./Components/IctAcademy/IctAcademy";
 import NegotiatePrice from "./Components/NegotiatePrice/NegotiatePrice";
 import AllNegotiations from "./Components/NegotiatePrice/AllNegotiations";
+import Profile from "./Components/Profile/Profile";
 
 class App extends Component {
   render() {
@@ -32,6 +33,7 @@ class App extends Component {
               <Route path="/idken/signup" component={SignUp} />
               <Route path="/idken/ictacademy" component={IctAcademy} />
               <Route path="/idken/payment" component={PaymentForm} />
+              <Route path="/idken/profile" component={Profile} />
               <Route path="/idken/negotiateprice/:id" component={NegotiatePrice} />
               <Route path="/idken/allnegotiations/:id" component={AllNegotiations} />
               <ProtectedRoute path="/idken/order" component={Order} />

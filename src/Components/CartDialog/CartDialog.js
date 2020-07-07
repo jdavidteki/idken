@@ -29,7 +29,7 @@ class ConnectedCartDialog extends Component {
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    if (prevProps.someoneLoggedIn !== this.props.someoneLoggedIn) {
+    if ((prevProps.someoneLoggedIn !== this.props.someoneLoggedIn) && this.props.someoneLoggedIn) {
       this.loadAllItemsInCart()
     }
   }
