@@ -2,6 +2,8 @@ import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import Firebase from "../../Firebase/firebase";
+import CircularProgress from "@material-ui/core/CircularProgress";
+
 import "./Profile.css";
 
 const mapStateToProps = state => {
@@ -15,7 +17,7 @@ class ConnectedProfile extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            profileInfo: {}
+            profileInfo: null
         };
     }
 
@@ -45,36 +47,43 @@ class ConnectedProfile extends Component {
         }
 
         //TODOP: whenever user checks out an item, update totalSepnt in profiles/totalSpent
-        return (
-            <div className="Profile">
-                <div className="Profile-wrapper">
-                    <div className="Profile-info">
-                        <a href="#">
-                            <img src={this.state.profileInfo.avatar} alt="Profile image" />
-                        </a>
-                        <h2>
-                            <a>{this.state.profileInfo.firstName}, {this.state.profileInfo.lastName}</a>
-                        </h2>
-                        <h3>{this.state.profileInfo.location}</h3>
-                    </div>
-                    <div className="Profile-state">
-                    <ul>
-                        <li>
-                            <a href="#" target="_blank">
-                                <i>N{this.state.profileInfo.totalSpent}</i>
-                                <span>Total Spent</span>
+        if (this.state.profileInfo != null){
+            return (
+
+                <div className="Profile">
+                    <div className="Profile-wrapper">
+                        <div className="Profile-info">
+                            <a href="#">
+                                <img src={this.state.profileInfo.avatar} alt="Profile image" />
                             </a>
-                        </li>
-                        <li>
-                            <a href="#" target="_blank">
-                                <i>{this.state.profileInfo.dateJoined}</i>
-                                <span>Date Joined</span>
-                            </a>
-                        </li>
-                    </ul>
+                            <h2>
+                                <a>{this.state.profileInfo.firstName}, {this.state.profileInfo.lastName}</a>
+                            </h2>
+                            <h3>{this.state.profileInfo.location}</h3>
+                        </div>
+                        <div className="Profile-state">
+                        <ul>
+                            <li>
+                                <a href="#" target="_blank">
+                                    <i>N{this.state.profileInfo.totalSpent}</i>
+                                    <span>Total Spent</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" target="_blank">
+                                    <i>{this.state.profileInfo.dateJoined}</i>
+                                    <span>Date Joined</span>
+                                </a>
+                            </li>
+                        </ul>
+                        </div>
                     </div>
                 </div>
-            </div>
+            )
+        }
+
+        return (
+            <CircularProgress className="circular" />
         )
     }
 }
