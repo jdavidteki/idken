@@ -1,0 +1,90 @@
+.Profile{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    background-color: #f5f5f5;
+}
+
+.Profile-wrapper{
+    width: 50%;
+    max-width: 500px;
+}
+
+.Profile-info {
+    background: #fff;
+    text-align: center;
+    padding: 1.875rem .9375rem;
+}
+
+.Profile-info img {
+    width: 6.25rem;
+    height: 6.25rem;
+    margin: 1rem auto;
+    border-radius: 50%;
+    display: block;
+    box-shadow: 0 0 0.0625rem rgba(0, 0, 0, 0.5);
+}
+
+.Profile-info h2 a {
+    font-size: 1.65rem;
+    color: #2368bd;
+}
+
+.Profile-info h3 {
+    font-size: 1.1885rem;
+    color: #bdcbce;
+}
+
+.Profile-state {
+    background: #1a4e8e;
+    text-align: center;
+    padding: 1.875rem .9375rem;
+    border-radius: 0 0 .3125rem .3125rem;
+}
+
+.Profile-state li {
+    list-style: none;
+    display: inline-block;
+    margin-right: 1rem;
+}
+
+.Profile-state a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.Profile-state i {
+    font-size: 1.5rem;
+    font-weight: 700;
+    font-style: normal;
+    display: block;
+}
+
+.Profile-state ul {
+    display: flex;
+    justify-content: space-between;
+}
+
+.Profile-state span {
+    font-size: .844rem;
+    letter-spacing: .0625rem;
+    color: #fff;
+}
+
+.Profile-notFound {
+    background: #fff;
+    padding: 1.875rem;
+    text-align: center;
+}
+
+.Profile-notFound h2 {
+    font-size: 2rem;
+    color: #2368bd;
+    margin-bottom: .625rem;
+}
+
+.Profile-notFound p {
+    font-size: 1rem;
+    color: #a3b6bb;
+}

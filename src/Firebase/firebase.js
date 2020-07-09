@@ -304,6 +304,20 @@ class Firebase {
       })
     })
   }
+
+  fetchUserProfile = (uid) => {
+    return new Promise((resolve, reject) => {
+      this.db().
+      ref('/profiles/' + uid).
+      once('value').
+      then(snapshot => {
+        resolve(snapshot.val())
+      }).
+      catch(error => {
+        reject(error)
+      })
+    })
+  }
 }
 
 export default new Firebase();
