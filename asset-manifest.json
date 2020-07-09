@@ -1,11 +1,11 @@
 {
   "files": {
-    "app.js": "/idken/static/js/app.a6a6897c.chunk.js",
-    "app.js.map": "/idken/static/js/app.a6a6897c.chunk.js.map",
+    "app.js": "/idken/static/js/app.30f088eb.chunk.js",
+    "app.js.map": "/idken/static/js/app.30f088eb.chunk.js.map",
     "runtime~app.js": "/idken/static/js/runtime~app.b4a2df9d.js",
     "runtime~app.js.map": "/idken/static/js/runtime~app.b4a2df9d.js.map",
-    "static/js/2.a071e634.chunk.js": "/idken/static/js/2.a071e634.chunk.js",
-    "static/js/2.a071e634.chunk.js.map": "/idken/static/js/2.a071e634.chunk.js.map",
+    "static/js/2.5bef93f7.chunk.js": "/idken/static/js/2.5bef93f7.chunk.js",
+    "static/js/2.5bef93f7.chunk.js.map": "/idken/static/js/2.5bef93f7.chunk.js.map",
     "favicon-16.png": "/idken/favicon-16.png",
     "favicon-32.png": "/idken/favicon-32.png",
     "favicon.ico": "/idken/favicon.ico",
@@ -16,7 +16,7 @@
   },
   "entrypoints": [
     "static/js/runtime~app.b4a2df9d.js",
-    "static/js/2.a071e634.chunk.js",
-    "static/js/app.a6a6897c.chunk.js"
+    "static/js/2.5bef93f7.chunk.js",
+    "static/js/app.30f088eb.chunk.js"
   ]
 }
