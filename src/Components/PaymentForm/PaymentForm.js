@@ -9,7 +9,6 @@ import "./CardSectionStyles.css";
 const promise = loadStripe('pk_test_PIzaoa0Dq0IPmzb6f0ePnTi200Wyr850qg');
 
 const PaymentForm = (state) => {
-    console.log(state)
     return (
         <div className="PaymentForm">
             <Elements stripe={promise}>
@@ -30,10 +29,10 @@ function getTotalPrice(cartItems){
 
 const mapStateToProps = state => {
     return {
-      nrOfItemsInCard: state.cartItems.length,
+      nrOfItemsInCard: state.checkedOutItems.length,
       loggedInUser: state.loggedInUser,
-      totalPriceToCharge: getTotalPrice(state.cartItems)
+      totalPriceToCharge: getTotalPrice(state.checkedOutItems)
     };
 };
 
-export default  withRouter(connect(mapStateToProps)(PaymentForm));
+export default withRouter(connect(mapStateToProps)(PaymentForm));

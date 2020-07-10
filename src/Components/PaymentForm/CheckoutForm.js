@@ -17,18 +17,15 @@ export default function CheckoutForm(totalPriceToCharge) {
   useEffect(() => {
     // Create PaymentIntent as soon as the page loads
     window
-      .fetch("http://localhost:4242/create-payment-intent", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ total:totalPriceToCharge })
-      })
-      .then(res => {
-        return res.json();
-      })
+      var requestOptions = {
+        method: 'GET',
+        redirect: 'follow',
+      };
+
+      fetch(`https://nwjlkopczg.execute-api.us-east-1.amazonaws.com/test/idkenLambda?amount=${totalPriceToCharge.totalPriceToCharge}&tokenId=tok_visa`, requestOptions)
+      .then(response => response.json())
       .then(data => {
-        setClientSecret(data.clientSecret);
+        setClientSecret(`${data.client_secret}`);
       });
   }, []);
 
