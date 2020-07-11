@@ -2,13 +2,19 @@ import React from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import CheckoutForm from "./CheckoutForm";
-import { withRouter } from "react-router-dom";
+import { withRouter, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import "./CardSectionStyles.css";
 
 const promise = loadStripe('pk_test_PIzaoa0Dq0IPmzb6f0ePnTi200Wyr850qg');
 
 const PaymentForm = (state) => {
+    //if there are zero items in the cart it means user is here illegally
+    const { from } =  { from: { pathname: "/idken" } };
+    if (state.nrOfItemsInCard == 0) {
+      return <Redirect to={from} />;
+    }
+
     return (
         <div className="PaymentForm">
             <Elements stripe={promise}>
@@ -21,8 +27,8 @@ const PaymentForm = (state) => {
 function getTotalPrice(cartItems){
     let totalPrice = 0
 
-    cartItems.forEach((value,index,array) => {
-        totalPrice += value.price
+    cartItems.forEach((item,index,array) => {
+        totalPrice += item.price * item.quantity
     })
     return totalPrice * 100;
 }

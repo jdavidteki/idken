@@ -10,7 +10,6 @@ import Order from "./Components/Order/Order";
 import Login from "./Components/Login/Login";
 import PaymentForm from "./Components/PaymentForm/PaymentForm";
 import SignUp from "./Components/SignUp/SignUp";
-import ProtectedRoute from "./Components/ProtectedRoute/ProtectedRoute";
 import Footer from "./Components/Footer/Footer";
 import IctAcademy from "./Components/IctAcademy/IctAcademy";
 import NegotiatePrice from "./Components/NegotiatePrice/NegotiatePrice";
@@ -36,7 +35,7 @@ class App extends Component {
               <Route path="/idken/profile" component={Profile} />
               <Route path="/idken/negotiateprice/:id" component={NegotiatePrice} />
               <Route path="/idken/allnegotiations/:id" component={AllNegotiations} />
-              <ProtectedRoute path="/idken/order" component={Order} />
+              <Route path="/idken/order" component={Order} />
               <Route
                 component={() => (
                   <div style={{ padding: 20 }}>Page not found</div>
