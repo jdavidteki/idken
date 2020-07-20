@@ -4,8 +4,9 @@ import {
   useStripe,
   useElements
 } from "@stripe/react-stripe-js";
+import Firebase from "../../Firebase/firebase.js";
 
-export default function CheckoutForm(totalPriceToCharge) {
+export default function CheckoutForm(props) {
   const [succeeded, setSucceeded] = useState(false);
   const [error, setError] = useState(null);
   const [processing, setProcessing] = useState('');
@@ -22,7 +23,7 @@ export default function CheckoutForm(totalPriceToCharge) {
         redirect: 'follow',
       };
 
-      fetch(`https://nwjlkopczg.execute-api.us-east-1.amazonaws.com/test/idkenLambda?amount=${totalPriceToCharge.totalPriceToCharge}&tokenId=tok_visa`, requestOptions)
+      fetch(`https://nwjlkopczg.execute-api.us-east-1.amazonaws.com/test/idkenLambda?amount=${props.totalPriceToCharge}&tokenId=tok_visa`, requestOptions)
       .then(response => response.json())
       .then(data => {
         setClientSecret(`${data.client_secret}`);
@@ -74,6 +75,7 @@ export default function CheckoutForm(totalPriceToCharge) {
       setError(null);
       setProcessing(false);
       setSucceeded(true);
+      Firebase.checkOutCartItems(props.uid, props.checkedOutItems)
     }
   };
 

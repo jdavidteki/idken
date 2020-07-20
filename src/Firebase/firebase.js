@@ -163,7 +163,6 @@ class Firebase {
     })
   }
 
-
   ceateNewProduct = (productInfo) =>{
     return new Promise((resolve, reject) => {
       this.db().
@@ -314,6 +313,72 @@ class Firebase {
         resolve(snapshot.val())
       }).
       catch(error => {
+        reject(error)
+      })
+    })
+  }
+
+  deleteItemFromCart = (uid) => {
+    return new Promise(resolve => {
+      this.db().
+      ref('/carts/').
+      child(uid).
+      remove().
+      then(() => {
+        resolve(true)
+      })
+    })
+  }
+
+  getProdQuantity(id){
+    return new Promise((resolve, reject) => {
+      this.db().
+      ref('/products/' + id).
+      once('value').
+      then(snapshot => {
+        let totalQuantityInStock = Object.values(snapshot.val())[0].quantity
+        let productChildId = Object.keys(snapshot.val())[0]
+        resolve({totalQuantityInStock, productChildId})
+      }).
+      catch(error => {
+        reject(error)
+      })
+    })
+  }
+
+  updateProdQntInStock = (item, index) => {
+    //TODO: update logicto reduce quantity of product in stock
+    //udpate code to check number of products currenlty in stock before adding nw product
+    //
+
+    console.log("item", item)
+    this.getProdQuantity(item.id).
+    then( val => {
+      console.log("val", val)
+      this.db().
+      ref('/products/').
+      child(item.id + "/" + val.productChildId + "/").
+      update({
+        quantity: val.totalQuantityInStock - item.quantity,
+      })
+    })
+  }
+
+  //add to checkout db 
+  //update quantity field in product db
+  checkOutCartItems = (uid, checkedOutItems) => {
+    console.log("checkedOutItems", checkedOutItems) 
+    return new Promise((resolve, reject) => {
+      this.db().
+      ref('/checkedOutItems/' + uid + '/').
+      push({
+        items: checkedOutItems,
+       }).
+      then((val) => {
+        checkedOutItems.forEach(this.updateProdQntInStock);
+        // this.deleteItemFromCart(uid)
+        resolve(val)
+      }).catch(error =>{
         reject(error)
       })
     })

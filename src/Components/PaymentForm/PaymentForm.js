@@ -18,7 +18,11 @@ const PaymentForm = (state) => {
     return (
         <div className="PaymentForm">
             <Elements stripe={promise}>
-                <CheckoutForm totalPriceToCharge={state.totalPriceToCharge} />
+                <CheckoutForm 
+                    checkedOutItems={state.checkedOutItems} 
+                    totalPriceToCharge={state.totalPriceToCharge} 
+                    uid={state.loggedInUser.uid} 
+                />
             </Elements>
         </div>
     )
@@ -37,7 +41,8 @@ const mapStateToProps = state => {
     return {
       nrOfItemsInCard: state.checkedOutItems.length,
       loggedInUser: state.loggedInUser,
-      totalPriceToCharge: getTotalPrice(state.checkedOutItems)
+      totalPriceToCharge: getTotalPrice(state.checkedOutItems),
+      checkedOutItems: state.checkedOutItems
     };
 };
 
