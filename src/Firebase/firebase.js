@@ -318,18 +318,6 @@ class Firebase {
     })
   }
 
-  deleteItemFromCart = (uid) => {
-    return new Promise(resolve => {
-      this.db().
-      ref('/carts/').
-      child(uid).
-      remove().
-      then(() => {
-        resolve(true)
-      })
-    })
-  }
-
   getProdQuantity(id){
     return new Promise((resolve, reject) => {
       this.db().
@@ -351,10 +339,8 @@ class Firebase {
     //udpate code to check number of products currenlty in stock before adding nw product
     //
 
-    console.log("item", item)
     this.getProdQuantity(item.id).
     then( val => {
-      console.log("val", val)
       this.db().
       ref('/products/').
       child(item.id + "/" + val.productChildId + "/").
@@ -367,7 +353,6 @@ class Firebase {
   //add to checkout db 
   //update quantity field in product db
   checkOutCartItems = (uid, checkedOutItems) => {
-    console.log("checkedOutItems", checkedOutItems) 
     return new Promise((resolve, reject) => {
       this.db().
       ref('/checkedOutItems/' + uid + '/').
@@ -376,7 +361,7 @@ class Firebase {
        }).
       then((val) => {
         checkedOutItems.forEach(this.updateProdQntInStock);
-        // this.deleteItemFromCart(uid)
+        checkedOutItems.forEach(item => this.deleteItemFromCart({product: item, uid:uid}))
         resolve(val)
       }).catch(error =>{
         reject(error)
