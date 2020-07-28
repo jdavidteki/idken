@@ -3,6 +3,12 @@ import config from "./config.js";
 
 class Firebase {
 
+  enoughInStock = {
+    enough: true,
+    name: '',
+    noItemsLeft: 0,
+  };
+
   initializeApp = () =>{
     if (!firebase.apps.length) {
         firebase.initializeApp(config);
@@ -334,25 +340,48 @@ class Firebase {
     })
   }
 
-  updateProdQntInStock = (item, index) => {
-    //TODO: update logicto reduce quantity of product in stock
-    //udpate code to check number of products currenlty in stock before adding nw product
-    //
-
+  updateProdQntInStock = (item) => {
     this.getProdQuantity(item.id).
     then( val => {
+      if (val.totalQuantityInStock >= item.quantity){
+        this.db().
+        ref('/products/').
+        child(item.id + "/" + val.productChildId + "/").
+        update({
+          quantity: val.totalQuantityInStock - item.quantity,
+        })
+      }else{
+        this.enoughInStock.enough = false
+        this.enoughInStock.name = item.name
+        this.enoughInStock.noItemsLeft = val.totalQuantityInStock
+      }
+    })
+  }
+
+  updateTotalUserSpent = (uid, totalSpentNow) => {
+    return new Promise((resolve, reject) => {
       this.db().
-      ref('/products/').
-      child(item.id + "/" + val.productChildId + "/").
-      update({
-        quantity: val.totalQuantityInStock - item.quantity,
+      ref('/profiles/' + uid + '/totalSpent').
+      once('value').
+      then(snapshot => {
+        let totalSpentSoFar = snapshot.val()
+
+        this.db().
+        ref('/profiles/').
+        child(uid + '/').
+        update({
+          totalSpent: totalSpentSoFar + totalSpentNow,
+        })
+      }).
+      catch(error => {
+        reject(error)
       })
     })
   }
 
   //add to checkout db 
   //update quantity field in product db
-  checkOutCartItems = (uid, checkedOutItems) => {
+  checkOutCartItems = (uid, checkedOutItems, totalPriceToCharge) => {
     return new Promise((resolve, reject) => {
       this.db().
       ref('/checkedOutItems/' + uid + '/').
@@ -361,9 +390,25 @@ class Firebase {
        }).
       then((val) => {
         checkedOutItems.forEach(this.updateProdQntInStock);
-        checkedOutItems.forEach(item => this.deleteItemFromCart({product: item, uid:uid}))
-        resolve(val)
-      }).catch(error =>{
+
+        setTimeout(
+          () => { 
+            if (this.enoughInStock.enough){
+              checkedOutItems.forEach(item => this.deleteItemFromCart({product: item, uid:uid}));
+              this.updateTotalUserSpent(uid, totalPriceToCharge);
+              resolve(val)
+            }else{
+              let errorMsg = `Sorry, ${this.enoughInStock.name} is out of stock`
+              if(this.enoughInStock.noItemsLeft > 0){
+                errorMsg = `Sorry, there are only ${this.enoughInStock.noItemsLeft} ${this.enoughInStock.name}s left in stock`
+              }
+              reject(errorMsg)
+            }
+          }, 
+          2500
+        );
+      }).
+      catch(error =>{
         reject(error)
       })
     })

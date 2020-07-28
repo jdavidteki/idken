@@ -55,28 +55,36 @@ export default function CheckoutForm(props) {
     setError(event.error ? event.error.message : "");
   };
 
-  const handleSubmit = async ev => {
+  const handleSubmit = ev => {
     ev.preventDefault();
     setProcessing(true);
 
-    const payload = await stripe.confirmCardPayment(clientSecret, {
-      payment_method: {
-        card: elements.getElement(CardElement),
-        billing_details: {
-          name: ev.target.name.value
-        }
-      }
-    });
+    Firebase.checkOutCartItems(props.uid, props.checkedOutItems, props.totalPriceToCharge).
+    then(async () => {
 
-    if (payload.error) {
-      setError(`Payment failed ${payload.error.message}`);
+      const payload = await stripe.confirmCardPayment(clientSecret, {
+        payment_method: {
+          card: elements.getElement(CardElement),
+          billing_details: {
+            name: `Payment amount: ${props.totalPriceToCharge}`
+          }
+        }
+      });
+  
+      if (payload.error) {
+        setError(`Payment failed ${payload.error.message}`);
+        setProcessing(false);
+      } else {
+        setError(null);
+        setProcessing(false);
+        setSucceeded(true);
+      }
+    }).
+    catch((error)=>{
+      setError(`Payment failed: ${error}`);
       setProcessing(false);
-    } else {
-      setError(null);
-      setProcessing(false);
-      setSucceeded(true);
-      Firebase.checkOutCartItems(props.uid, props.checkedOutItems)
-    }
+      console.log(error);
+    })
   };
 
   return (

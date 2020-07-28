@@ -1,4 +1,5 @@
 node_modules
 .expo/web/
+.expo/packager-info.json
 web-build/
 src/ApiKeys.js
