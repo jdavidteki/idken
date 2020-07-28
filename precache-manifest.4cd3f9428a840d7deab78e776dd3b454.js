@@ -1,7 +1,7 @@
 self.__precacheManifest = [
   {
-    "revision": "6b8517baee823dbcc71f",
-    "url": "/idken/static/js/app.899289c6.chunk.js"
+    "revision": "02eefe1171f2776ed1af",
+    "url": "/idken/static/js/app.80e7ee7b.chunk.js"
   },
   {
     "revision": "a093ab8facc7537ec62e",
@@ -16,12 +16,12 @@ self.__precacheManifest = [
     "url": "/idken/static/media/logo.e0e01978.png"
   },
   {
-    "revision": "ec543248d7b23864564429fc03837190",
-    "url": "/idken/serve.json"
-  },
-  {
     "revision": "48c7ed4e7da9792af288a60d7242d615",
     "url": "/idken/expo-service-worker.js"
+  },
+  {
+    "revision": "ec543248d7b23864564429fc03837190",
+    "url": "/idken/serve.json"
   },
   {
     "revision": "afd5733ac789ab1795f1ed7a26e1ecd3",
@@ -36,7 +36,7 @@ self.__precacheManifest = [
     "url": "/idken/favicon.ico"
   },
   {
-    "revision": "6ce4729cac392475bda5d68ea909e5db",
+    "revision": "c92288ab3b3a9336c1eade3704059d27",
     "url": "/idken/index.html"
   },
   {
